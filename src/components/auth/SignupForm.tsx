@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Button from "../ui/Button";
 import Card from "../ui/Card";
 import { useSignUp } from "@clerk/clerk-react";
-import { FcGoogle } from "react-icons/fc";
+
 
 const SignupForm = () => {
   const { signUp } = useSignUp();

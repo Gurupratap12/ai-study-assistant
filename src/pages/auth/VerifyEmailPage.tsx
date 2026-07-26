@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSignUp, useAuth } from "@clerk/clerk-react";
+import { useSignUp } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 
 const VerifyEmailPage = () => {
