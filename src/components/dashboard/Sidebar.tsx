@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { useClerk } from "@clerk/clerk-react";
 
 const sidebarItems = [
   {
@@ -29,6 +30,8 @@ const sidebarItems = [
 ];
 
 const Sidebar = () => {
+  const { signOut } = useClerk();
+
   return (
     <aside
       className="
@@ -102,19 +105,24 @@ const Sidebar = () => {
       {/* Logout */}
 
       <button
+        onClick={() =>
+          signOut(() => {
+            window.location.href = "/";
+          })
+        }
         className="
-        absolute
-        bottom-8
-        left-6
-        right-6
-        rounded-2xl
-        bg-red-50
-        py-3
-        font-medium
-        text-red-600
-        transition
-        hover:bg-red-100
-        "
+  absolute
+  bottom-8
+  left-6
+  right-6
+  rounded-2xl
+  bg-red-50
+  py-3
+  font-medium
+  text-red-600
+  transition
+  hover:bg-red-100
+  "
       >
         🚪 Logout
       </button>

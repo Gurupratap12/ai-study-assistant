@@ -2,8 +2,11 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "../ui/Button";
 import Card from "../ui/Card";
+import { useSignUp } from "@clerk/clerk-react";
+import { FcGoogle } from "react-icons/fc";
 
 const SignupForm = () => {
+  const { signUp } = useSignUp();
   const [showPassword, setShowPassword] = useState(false);
 
   const [name, setName] = useState("");
@@ -12,21 +15,35 @@ const SignupForm = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!name || !email || !password) {
       alert("Please fill all fields");
       return;
     }
+    if (!signUp) return;
+    try {
+      setLoading(true);
 
-    setLoading(true);
+      await signUp.create({
+        firstName: name,
+        emailAddress: email,
+        password,
+      });
 
-    // Temporary signup simulation
-    setTimeout(() => {
+      await signUp.prepareEmailAddressVerification({
+        strategy: "email_code",
+      });
+
+      alert("Verification code sent to your email");
+      window.location.href = "/verify-email";
+    } catch (error: any) {
+      console.error(error);
+      alert(error.errors?.[0]?.message || "Signup failed");
+    } finally {
       setLoading(false);
-      alert("Account created successfully");
-    }, 1500);
+    }
   };
 
   return (
@@ -94,7 +111,7 @@ const SignupForm = () => {
         </div>
 
         {/* Signup Button */}
-        <Button className="w-full">
+        <Button className="w-full" disabled={loading}>
           {loading ? "Creating..." : "Create Account"}
         </Button>
       </form>

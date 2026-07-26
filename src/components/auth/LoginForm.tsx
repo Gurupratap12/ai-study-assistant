@@ -2,8 +2,10 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "../ui/Button";
 import Card from "../ui/Card";
+import { useSignIn } from "@clerk/clerk-react";
 
 const LoginForm = () => {
+  const { signIn } = useSignIn();
   const [showPassword, setShowPassword] = useState(false);
 
   const [email, setEmail] = useState("");
@@ -11,7 +13,7 @@ const LoginForm = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!email || !password) {
@@ -19,15 +21,24 @@ const LoginForm = () => {
       return;
     }
 
-    setLoading(true);
+    if (!signIn) return;
 
-    // Temporary login simulation
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      setLoading(true);
+
+      await signIn.create({
+        identifier: email,
+        password,
+      });
+
       window.location.href = "/dashboard";
-    }, 1500);
+    } catch (error: any) {
+      console.error(error);
+      alert(error.errors?.[0]?.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
   };
-
   return (
     <Card>
       <div className="text-center">
@@ -90,7 +101,7 @@ const LoginForm = () => {
         </div>
 
         {/* Login Button */}
-        <Button className="w-full">
+        <Button className="w-full" disabled={loading}>
           {loading ? "Logging in..." : "Login"}
         </Button>
       </form>

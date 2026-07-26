@@ -11,6 +11,7 @@ import AIAssistantPage from "../pages/ai/AIAssistantPage";
 import StudyPlannerPage from "../pages/planner/StudyPlannerPage";
 import ProfilePage from "../pages/profile/ProfilePage";
 import SettingsPage from "../pages/settings/SettingsPage";
+import VerifyEmailPage from "../pages/auth/VerifyEmailPage";
 
 const AppRoutes = () => {
   return (
@@ -24,6 +25,7 @@ const AppRoutes = () => {
         {/* Auth Pages */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/verify-email" element={<VerifyEmailPage />} />
 
         {/* Private Pages */}
         <Route path="/dashboard" element={<DashboardPage />} />
