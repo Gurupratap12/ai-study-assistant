@@ -78,11 +78,7 @@ const DashboardPage = () => {
       console.error(error);
     }
   };
-  useEffect(() => {
-    if (isLoaded && !userId) {
-      window.location.href = "/login";
-    }
-  }, [isLoaded, userId]);
+ 
   return (
     <DashboardLayout>
       {/* Welcome Section */}

@@ -5,7 +5,7 @@ import Card from "../ui/Card";
 import { useSignIn } from "@clerk/clerk-react";
 
 const LoginForm = () => {
-  const { signIn } = useSignIn();
+  const { signIn, setActive } = useSignIn();
   const [showPassword, setShowPassword] = useState(false);
 
   const [email, setEmail] = useState("");
@@ -26,10 +26,16 @@ const LoginForm = () => {
     try {
       setLoading(true);
 
-      await signIn.create({
+      const result = await signIn.create({
         identifier: email,
         password,
       });
+
+      await setActive({
+        session: result.createdSessionId,
+      });
+
+      window.location.href = "/dashboard";
 
       window.location.href = "/dashboard";
     } catch (error: any) {
