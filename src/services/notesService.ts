@@ -5,12 +5,12 @@ export const notesService = {
     return [];
   },
 
-  async createNote(note: Note): Promise<void> {},
+  async createNote(_note: Note): Promise<void> {},
 
   async updateNote(
-    id: string,
-    data: Partial<Note>,
+    _id: string,
+    _data: Partial<Note>,
   ): Promise<void> {},
 
-  async deleteNote(id: string): Promise<void> {},
+  async deleteNote(_id: string): Promise<void> {},
 };
