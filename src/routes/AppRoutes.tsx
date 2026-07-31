@@ -12,6 +12,7 @@ import StudyPlannerPage from "../pages/planner/StudyPlannerPage";
 import ProfilePage from "../pages/profile/ProfilePage";
 import SettingsPage from "../pages/settings/SettingsPage";
 import VerifyEmailPage from "../pages/auth/VerifyEmailPage";
+import LoginVerificationPage from "../pages/auth/LoginVerificationPage";
 
 const AppRoutes = () => {
   return (
@@ -26,6 +27,7 @@ const AppRoutes = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/verify-email" element={<VerifyEmailPage />} />
+        <Route path="/login-verification" element={<LoginVerificationPage />} />
 
         {/* Private Pages */}
         <Route path="/dashboard" element={<DashboardPage />} />

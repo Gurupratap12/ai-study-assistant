@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import Button from "../ui/Button";
 import Card from "../ui/Card";
 import { useSignIn } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
+  const navigate = useNavigate();
   const { signIn, setActive } = useSignIn();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -31,13 +33,26 @@ const LoginForm = () => {
         password,
       });
 
-      await setActive({
-        session: result.createdSessionId,
-      });
+      if (result.status === "complete") {
+        await setActive({
+          session: result.createdSessionId!,
+        });
 
-      window.location.href = "/dashboard";
+        return;
+      }
 
-      window.location.href = "/dashboard";
+      if (result.status === "needs_second_factor") {
+        await signIn.prepareSecondFactor({
+          strategy: "email_code",
+        });
+
+        navigate("/login-verification");
+        return;
+      }
+      console.log(signIn.status);
+      console.log(signIn.supportedSecondFactors);
+      console.log(JSON.stringify(result.supportedSecondFactors, null, 2));
+      console.log("Session Activated");
     } catch (error: any) {
       console.error(error);
       alert(error.errors?.[0]?.message || "Login failed");
