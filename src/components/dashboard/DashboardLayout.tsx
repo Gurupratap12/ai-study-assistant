@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Sidebar from "./Sidebar";
 import { useUser } from "@clerk/clerk-react";
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import { Search, Bell, Settings, Menu } from "lucide-react";
 
 interface DashboardLayoutProps {
@@ -16,7 +17,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     user?.firstName?.charAt(0).toUpperCase() ||
     user?.fullName?.charAt(0).toUpperCase() ||
     "U";
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-purple-50">
       <div
@@ -108,10 +109,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
       <div className="flex">
         {/* Sidebar */}
-       <Sidebar
-  sidebarOpen={sidebarOpen}
-  setSidebarOpen={setSidebarOpen}
-/>
+        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
         {/* Main */}
         <main className="flex-1">
@@ -202,53 +200,55 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
                 {/* Settings */}
 
-                <button
+                <NavLink
+                  to="/settings"
                   className="
-                  rounded-2xl
-                  border
-                  border-slate-200
-                  bg-white
-                  p-3
-                  transition
-                  hover:-translate-y-0.5
-                  hover:shadow-md
-                  "
+    rounded-2xl
+    border
+    border-slate-200
+    bg-white
+    p-3
+    transition
+    hover:-translate-y-0.5
+    hover:shadow-md
+  "
                 >
                   <Settings size={18} />
-                </button>
+                </NavLink>
 
                 {/* Profile */}
 
-                <button
+                <NavLink
+                  to="/profile"
                   className="
-                  flex
-                  items-center
-                  gap-3
-                  rounded-2xl
-                  border
-                  border-slate-200
-                  bg-white
-                  px-3
-                  py-2
-                  transition
-                  hover:shadow-md
-                  "
+    flex
+    items-center
+    gap-3
+    rounded-2xl
+    border
+    border-slate-200
+    bg-white
+    px-3
+    py-2
+    transition
+    hover:shadow-md
+  "
                 >
                   <div
                     className="
-                    flex
-                    h-10
-                    w-10
-                    items-center
-                    justify-center
-                    rounded-xl
-                    bg-linear-to-r
-  from-sky-300
-  via-slate-500
-  to-emerald-300
-                    font-bold
-                    text-white
-                    "
+      flex
+      h-10
+      w-10
+      items-center
+      justify-center
+      rounded-xl
+      bg-linear-to-r
+      from-sky-300
+      via-slate-500
+      to-emerald-300
+      font-bold
+      text-white
+    "
                   >
                     {userInitial}
                   </div>
@@ -258,7 +258,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
                     <p className="text-xs text-slate-500">Student</p>
                   </div>
-                </button>
+                </NavLink>
               </div>
             </div>
           </header>
