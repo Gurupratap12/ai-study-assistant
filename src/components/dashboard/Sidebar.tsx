@@ -1,31 +1,37 @@
 import { NavLink } from "react-router-dom";
 import { useClerk } from "@clerk/clerk-react";
-
+import {
+  LayoutDashboard,
+  NotebookPen,
+  Bot,
+  Brain,
+  ChartColumn,
+} from "lucide-react";
 const sidebarItems = [
   {
     name: "Dashboard",
     path: "/dashboard",
-    icon: "📊",
+    icon: LayoutDashboard,
   },
   {
     name: "Notes",
     path: "/notes",
-    icon: "📚",
+    icon: NotebookPen,
   },
   {
     name: "AI Assistant",
     path: "/ai-assistant",
-    icon: "🤖",
+    icon: Bot,
   },
   {
-    name: "Quiz",
+    name: "AI Quiz",
     path: "/quiz",
-    icon: "📝",
+    icon: Brain,
   },
   {
     name: "Progress",
     path: "/progress",
-    icon: "📈",
+    icon: ChartColumn,
   },
 ];
 
@@ -62,44 +68,47 @@ const Sidebar = () => {
       {/* Menu */}
 
       <nav className="space-y-2">
-        {sidebarItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            className={({ isActive }) =>
-              `
-              group
-              flex
-              items-center
-              gap-4
-              rounded-2xl
-              px-4
-              py-3
-              text-sm
-              font-medium
-              transition-all
-              duration-300
-              ${
-                isActive
-                  ? "bg-linear-to-r from-blue-500 to-purple-500 text-white shadow-lg"
-                  : "text-slate-600 hover:bg-white hover:shadow-md"
-              }
-              `
-            }
-          >
-            <span
-              className="
-              text-xl
-              transition
-              group-hover:scale-110
-              "
-            >
-              {item.icon}
-            </span>
+        {sidebarItems.map((item) => {
+          const Icon = item.icon;
 
-            {item.name}
-          </NavLink>
-        ))}
+          return (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                `
+        group
+        flex
+        items-center
+        gap-4
+        rounded-2xl
+        px-4
+        py-3
+        text-sm
+        font-medium
+        transition-all
+        duration-300
+        ${
+          isActive
+            ? "bg-linear-to-r from-blue-500 to-purple-500 text-white shadow-lg"
+            : "text-slate-600 hover:bg-white hover:shadow-md"
+        }
+        `
+              }
+            >
+              <span
+                className="
+        transition
+        group-hover:scale-110
+        "
+              >
+                <Icon size={20} />
+              </span>
+
+              {item.name}
+            </NavLink>
+          );
+        })}
       </nav>
 
       {/* Logout */}

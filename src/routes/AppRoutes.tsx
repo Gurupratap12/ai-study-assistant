@@ -13,6 +13,8 @@ import ProfilePage from "../pages/profile/ProfilePage";
 import SettingsPage from "../pages/settings/SettingsPage";
 import VerifyEmailPage from "../pages/auth/VerifyEmailPage";
 import LoginVerificationPage from "../pages/auth/LoginVerificationPage";
+import QuizPage from "../pages/quiz/QuizPage";
+import ProgressPage from "../pages/progress/ProgressPage";
 
 const AppRoutes = () => {
   return (
@@ -33,7 +35,9 @@ const AppRoutes = () => {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/notes" element={<NotesPage />} />
         <Route path="/ai-assistant" element={<AIAssistantPage />} />
+        <Route path="/quiz" element={<QuizPage />} />
         <Route path="/study-planner" element={<StudyPlannerPage />} />
+        <Route path="/progress" element={<ProgressPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Routes>
