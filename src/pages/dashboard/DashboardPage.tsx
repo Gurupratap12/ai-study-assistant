@@ -3,7 +3,7 @@ import StatCard from "../../components/dashboard/StatCard";
 import FeatureCard from "../../components/dashboard/FeatureCard";
 import { ai } from "../../lib/gemini";
 import { useEffect } from "react";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth, useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -58,6 +58,8 @@ const features = [
 ];
 const DashboardPage = () => {
   const { isLoaded, userId } = useAuth();
+  const { user } = useUser();
+  const userName = user?.firstName || user?.username || "Student";
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -78,7 +80,7 @@ const DashboardPage = () => {
       console.error(error);
     }
   };
- 
+
   return (
     <DashboardLayout>
       {/* Welcome Section */}
@@ -93,7 +95,7 @@ const DashboardPage = () => {
             </span>
 
             <h1 className="mt-6 text-5xl font-bold tracking-tight text-slate-900">
-              Welcome back, Manu
+              Welcome back, {userName}
             </h1>
 
             <p className="mt-5 text-lg leading-8 text-slate-600">

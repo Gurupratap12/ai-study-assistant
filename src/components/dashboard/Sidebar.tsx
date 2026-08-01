@@ -14,7 +14,7 @@ const sidebarItems = [
   },
   {
     name: "AI Assistant",
-    path: "/assistant",
+    path: "/ai-assistant",
     icon: "🤖",
   },
   {

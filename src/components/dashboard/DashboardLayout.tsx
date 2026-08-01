@@ -1,23 +1,25 @@
 import type { ReactNode } from "react";
 import Sidebar from "./Sidebar";
+import { useUser } from "@clerk/clerk-react";
 
-import {
-  Search,
-  Bell,
-  Settings,
-  Menu,
-} from "lucide-react";
+import { Search, Bell, Settings, Menu } from "lucide-react";
 
 interface DashboardLayoutProps {
   children: ReactNode;
 }
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
+  const { user } = useUser();
+
+  const userName = user?.firstName || user?.fullName || "Student";
+  const userInitial =
+    user?.firstName?.charAt(0).toUpperCase() ||
+    user?.fullName?.charAt(0).toUpperCase() ||
+    "U";
   return (
-    
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-purple-50">
       <div
-  className="
+        className="
   relative
   overflow-hidden
   rounded-3xl
@@ -29,28 +31,22 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   text-black
   shadow-2xl
   "
->
+      >
+        <div className="relative z-10">
+          <p className="text-black">AI Study Assistant</p>
 
-  <div className="relative z-10">
+          <h2 className="mt-2 text-4xl font-bold">
+            Welcome back, {userName}👋
+          </h2>
 
-    <p className="text-black">
-      AI Study Assistant
-    </p>
+          <p className="mt-4 max-w-xl text-black leading-7">
+            Continue learning smarter with AI. Generate notes, create quizzes
+            and track your study progress from one place.
+          </p>
 
-    <h2 className="mt-2 text-4xl font-bold">
-      Welcome back, Manu 👋
-    </h2>
-
-    <p className="mt-4 max-w-xl text-black leading-7">
-      Continue learning smarter with AI. Generate notes,
-      create quizzes and track your study progress from
-      one place.
-    </p>
-
-    <div className="mt-8 flex gap-4">
-
-      <button
-        className="
+          <div className="mt-8 flex gap-4">
+            <button
+              className="
         rounded-2xl
         bg-white
         px-6
@@ -60,12 +56,12 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         transition
         hover:scale-105
         "
-      >
-        Start Learning
-      </button>
+            >
+              Start Learning
+            </button>
 
-      <button
-        className="
+            <button
+              className="
         rounded-2xl
         border
         border-white/30
@@ -76,17 +72,14 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         transition
         hover:bg-white/20
         "
-      >
-        Ask AI
-      </button>
+            >
+              Ask AI
+            </button>
+          </div>
+        </div>
 
-    </div>
-
-  </div>
-
-
-  <div
-    className="
+        <div
+          className="
     absolute
     -right-10
     -top-10
@@ -96,10 +89,10 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     bg-white/10
     blur-2xl
     "
-  />
+        />
 
-  <div
-    className="
+        <div
+          className="
     absolute
     bottom-0
     right-32
@@ -109,18 +102,15 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     bg-cyan-300/20
     blur-2xl
     "
-  />
-
-</div>
+        />
+      </div>
 
       <div className="flex">
-
         {/* Sidebar */}
         <Sidebar />
 
         {/* Main */}
         <main className="flex-1">
-
           {/* Top Navbar */}
 
           <header
@@ -134,13 +124,10 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             backdrop-blur-xl
             "
           >
-
             <div className="flex h-20 items-center justify-between px-8">
-
               {/* Left */}
 
               <div className="flex items-center gap-4">
-
                 <button
                   className="
                   rounded-xl
@@ -154,29 +141,20 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 </button>
 
                 <div>
-
                   <h1 className="text-2xl font-bold text-slate-900">
                     Dashboard
                   </h1>
 
-                  <p className="text-sm text-slate-500">
-                    Welcome back 👋
-                  </p>
-
+                  <p className="text-sm text-slate-500">Welcome back 👋</p>
                 </div>
-
               </div>
-
-
 
               {/* Right */}
 
               <div className="flex items-center gap-4">
-
                 {/* Search */}
 
                 <div className="relative hidden lg:block">
-
                   <Search
                     size={18}
                     className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
@@ -198,10 +176,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     focus:border-blue-500
                     "
                   />
-
                 </div>
-
-
 
                 {/* Notification */}
 
@@ -220,8 +195,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   <Bell size={18} />
                 </button>
 
-
-
                 {/* Settings */}
 
                 <button
@@ -238,8 +211,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 >
                   <Settings size={18} />
                 </button>
-
-
 
                 {/* Profile */}
 
@@ -258,7 +229,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   hover:shadow-md
                   "
                 >
-
                   <div
                     className="
                     flex
@@ -275,43 +245,24 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     text-white
                     "
                   >
-                    M
+                    {userInitial}
                   </div>
 
                   <div className="hidden text-left xl:block">
+                    <p className="text-sm font-semibold">{userName}</p>
 
-                    <p className="text-sm font-semibold">
-                      Manu
-                    </p>
-
-                    <p className="text-xs text-slate-500">
-                      Student
-                    </p>
-
+                    <p className="text-xs text-slate-500">Student</p>
                   </div>
-
                 </button>
-
               </div>
-
             </div>
-
           </header>
-
-
 
           {/* Page */}
 
-          <section className="p-8">
-
-            {children}
-
-          </section>
-
+          <section className="p-8">{children}</section>
         </main>
-
       </div>
-
     </div>
   );
 };
