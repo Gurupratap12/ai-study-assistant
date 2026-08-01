@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Sidebar from "./Sidebar";
 import { useUser } from "@clerk/clerk-react";
-
+import { useState } from "react";
 import { Search, Bell, Settings, Menu } from "lucide-react";
 
 interface DashboardLayoutProps {
@@ -16,6 +16,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     user?.firstName?.charAt(0).toUpperCase() ||
     user?.fullName?.charAt(0).toUpperCase() ||
     "U";
+    const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-purple-50">
       <div
@@ -107,7 +108,10 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
       <div className="flex">
         {/* Sidebar */}
-        <Sidebar />
+       <Sidebar
+  sidebarOpen={sidebarOpen}
+  setSidebarOpen={setSidebarOpen}
+/>
 
         {/* Main */}
         <main className="flex-1">
@@ -129,13 +133,14 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
               <div className="flex items-center gap-4">
                 <button
+                  onClick={() => setSidebarOpen(true)}
                   className="
-                  rounded-xl
-                  p-2
-                  transition
-                  hover:bg-slate-100
-                  md:hidden
-                  "
+  rounded-xl
+  p-2
+  transition
+  hover:bg-slate-100
+  md:hidden
+  "
                 >
                   <Menu size={22} />
                 </button>

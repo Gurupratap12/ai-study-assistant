@@ -35,25 +35,42 @@ const sidebarItems = [
   },
 ];
 
-const Sidebar = () => {
+interface SidebarProps {
+  sidebarOpen: boolean;
+  setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const { signOut } = useClerk();
 
   return (
     <aside
-      className="
-      sticky
-      top-0
-      hidden
-      h-screen
-      w-72
-      border-r
-      border-white/40
-      bg-white/60
-      p-6
-      backdrop-blur-xl
-      md:block
-      "
+      className={`
+    top-0
+    h-screen
+    w-72
+    border-r
+    border-white/40
+    bg-white/60
+    p-6
+    backdrop-blur-xl
+
+    fixed
+    left-0
+    z-50
+    transition-transform
+    duration-300
+
+    ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+
+    md:sticky
+    md:block
+    md:translate-x-0
+  `}
     >
+      <button onClick={() => setSidebarOpen(false)} className="md:hidden">
+        ✕
+      </button>
       {/* Logo */}
 
       <div className="mb-10">
