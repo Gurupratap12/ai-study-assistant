@@ -1,6 +1,6 @@
 import type { Note } from "../types/note";
 
-const API_URL = "http://localhost:5000/api/notes";
+const API_URL = "https://ai-study-assistant-dttq.onrender.com/api/notes";
 
 export const notesService = {
  async getNotes(clerkId: string): Promise<Note[]> {

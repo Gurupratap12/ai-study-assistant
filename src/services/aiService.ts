@@ -1,5 +1,5 @@
 import { ai } from "../lib/gemini";
-const API_URL = "http://localhost:5000/api/chats";
+const API_URL = "https://ai-study-assistant-dttq.onrender.com/api/chats";
 export const aiService = {
   async sendMessage(message: string): Promise<string> {
     
