@@ -8,7 +8,7 @@ import { useState } from "react";
 
 import { notesService } from "../../services/notesService";
 import { aiService } from "../../services/aiService";
-//import { quizService } from "../../services/quizService";
+import { quizService } from "../../services/quizService";
 
 import {
   NotebookPen,
@@ -46,10 +46,7 @@ const DashboardPage = () => {
     quizzes: 0,
     progress: 0,
   });
-  const progress =
-  stats.notes === 0
-    ? 0
-    : Math.min(100, stats.notes * 10);
+  const progress = stats.notes === 0 ? 0 : Math.min(100, stats.notes * 10);
   useEffect(() => {
     if (isLoaded && !userId) {
       navigate("/login");
@@ -63,6 +60,7 @@ const DashboardPage = () => {
       try {
         const notes = await notesService.getNotes(user.id);
         const chats = await aiService.getChats(user.id);
+        const quizzes = await quizService.getQuizResults(user.id);
         const totalMessages = chats.reduce(
           (count: number, chat: any) => count + chat.messages.length,
           0,
@@ -70,7 +68,7 @@ const DashboardPage = () => {
         setStats({
           notes: notes.length,
           chats: totalMessages,
-          quizzes: 0,
+          quizzes: quizzes.length,
           progress: 0,
         });
       } catch (error) {
