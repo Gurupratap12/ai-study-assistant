@@ -1,21 +1,40 @@
 import { useEffect, useState } from "react";
 import type { ChatMessage } from "../types/chat";
 import { aiService } from "../services/aiService";
-
+import { useUser } from "@clerk/clerk-react";
 export const useChat = () => {
-  const [messages, setMessages] = useState<ChatMessage[]>(() => {
-  const saved = localStorage.getItem("ai-chat");
-
-  return saved ? JSON.parse(saved) : [];
-});
-useEffect(() => {
-  localStorage.setItem("ai-chat", JSON.stringify(messages));
-}, [messages]);
+  const { user } = useUser();
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
+  const [currentChatId, setCurrentChatId] = useState<string | null>(null);
+  
+useEffect(() => {
+  if (!user) return;
+
+  const loadChats = async () => {
+    try {
+      const chats = await aiService.getChats(user.id);
+
+     if (chats.length > 0) {
+  setCurrentChatId(chats[0]._id);
+  setMessages(chats[0].messages);
+}
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  loadChats();
+}, [user]);
 
   const sendMessage = async (text: string) => {
-    if (!text.trim()) return;
+    console.log("Current Chat ID:", currentChatId);
+  if (!text.trim() || !user) return;
 
+  setLoading(true);
+
+  try {
+    // User Message
     const userMessage: ChatMessage = {
       id: crypto.randomUUID(),
       role: "user",
@@ -23,9 +42,11 @@ useEffect(() => {
       createdAt: new Date().toISOString(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
-    setLoading(true);
+    const currentMessages = [...messages, userMessage];
 
+    setMessages(currentMessages);
+
+    // Gemini Response
     const reply = await aiService.sendMessage(text);
 
     const aiMessage: ChatMessage = {
@@ -35,9 +56,26 @@ useEffect(() => {
       createdAt: new Date().toISOString(),
     };
 
-    setMessages((prev) => [...prev, aiMessage]);
+    const updatedMessages = [...currentMessages, aiMessage];
+
+    setMessages(updatedMessages);
+
+    // Save / Update Chat
+const chat = await aiService.saveChat(currentChatId, {
+  clerkId: user.id,
+  title: text.substring(0, 30),
+  messages: updatedMessages,
+});
+
+if (!currentChatId) {
+  setCurrentChatId(chat._id);
+}
+  } catch (error) {
+    console.error(error);
+  } finally {
     setLoading(false);
-  };
+  }
+};
 
   const clearChat = () => {
   setMessages([]);

@@ -1,16 +1,22 @@
 import { useEffect, useState } from "react";
+import { useUser } from "@clerk/clerk-react";
+
 import type { Note } from "../types/note";
 import { notesService } from "../services/notesService";
 
 export const useNotes = () => {
+  const { user } = useUser();
+
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchNotes = async () => {
+    if (!user) return;
+
     try {
       setLoading(true);
 
-      const data = await notesService.getNotes();
+      const data = await notesService.getNotes(user.id);
 
       setNotes(data);
     } catch (error) {
@@ -21,11 +27,15 @@ export const useNotes = () => {
   };
 
   useEffect(() => {
-    fetchNotes();
-  }, []);
+    if (user) {
+      fetchNotes();
+    }
+  }, [user]);
 
   const createNote = async (note: Note) => {
-    await notesService.createNote(note);
+    if (!user) return;
+
+    await notesService.createNote(note, user.id);
 
     await fetchNotes();
   };

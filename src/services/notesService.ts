@@ -1,61 +1,59 @@
 import type { Note } from "../types/note";
 
-const NOTES_KEY = "ai-study-notes";
+const API_URL = "http://localhost:5000/api/notes";
 
 export const notesService = {
-  async getNotes(): Promise<Note[]> {
-    const notes = localStorage.getItem(NOTES_KEY);
+ async getNotes(clerkId: string): Promise<Note[]> {
+  const response = await fetch(`${API_URL}?clerkId=${clerkId}`);
 
-    if (!notes) {
-      return [];
-    }
+  if (!response.ok) {
+    throw new Error("Failed to fetch notes");
+  }
 
-    return JSON.parse(notes);
-  },
+  return await response.json();
+},
 
-  async createNote(note: Note): Promise<void> {
-    const notes = await this.getNotes();
+  async createNote(note: Note, clerkId: string): Promise<void> {
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      ...note,
+      clerkId,
+    }),
+  });
 
-    const updatedNotes = [note, ...notes];
-
-    localStorage.setItem(
-      NOTES_KEY,
-      JSON.stringify(updatedNotes),
-    );
-  },
+  if (!response.ok) {
+    throw new Error("Failed to create note");
+  }
+},
 
   async updateNote(
     id: string,
     data: Partial<Note>,
   ): Promise<void> {
-    const notes = await this.getNotes();
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
-    const updatedNotes = notes.map((note) =>
-      note.id === id
-        ? {
-            ...note,
-            ...data,
-            updatedAt: new Date().toISOString(),
-          }
-        : note,
-    );
-
-    localStorage.setItem(
-      NOTES_KEY,
-      JSON.stringify(updatedNotes),
-    );
+    if (!response.ok) {
+      throw new Error("Failed to update note");
+    }
   },
 
   async deleteNote(id: string): Promise<void> {
-    const notes = await this.getNotes();
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: "DELETE",
+    });
 
-    const updatedNotes = notes.filter(
-      (note) => note.id !== id,
-    );
-
-    localStorage.setItem(
-      NOTES_KEY,
-      JSON.stringify(updatedNotes),
-    );
+    if (!response.ok) {
+      throw new Error("Failed to delete note");
+    }
   },
 };

@@ -6,28 +6,32 @@ import SearchBar from "../../components/notes/SearchBar";
 import EmptyState from "../../components/notes/EmptyState";
 import NoteCard from "../../components/notes/NoteCard";
 import NoteModal from "../../components/notes/NoteModal";
-
+import { useUser } from "@clerk/clerk-react";
 import { useNotes } from "../../hooks/useNotes";
 import type { Note } from "../../types/note";
 
 const NotesPage = () => {
-const { notes, createNote, updateNote, deleteNote } = useNotes();
-const [search, setSearch] = useState("");
-const filteredNotes = notes.filter((note) =>
-note.title.toLowerCase().includes(search.toLowerCase())
-);
-const [isModalOpen, setIsModalOpen] = useState(false);
-const [selectedNote, setSelectedNote] = useState<Note | null>(null);
+  const { user } = useUser();
+  const { notes, createNote, updateNote, deleteNote } = useNotes();
+  const [search, setSearch] = useState("");
+  const filteredNotes = notes.filter((note) =>
+    note.title.toLowerCase().includes(search.toLowerCase()),
+  );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedNote, setSelectedNote] = useState<Note | null>(null);
 
-const handleSave = async (title: string, content: string) => {
+  const handleSave = async (title: string, content: string) => {
     if (selectedNote) {
-        await updateNote(selectedNote.id, {
-            title,
-            content,
-        });
+      if (!selectedNote.id) return;
+
+      await updateNote(selectedNote.id, {
+        title,
+        content,
+      });
     } else {
-        const newNote: Note = {
-        id: crypto.randomUUID(),
+      const newNote = {
+        clerkId: user?.id,
+        id: "",
         title,
         content,
         category: "General",
@@ -35,7 +39,6 @@ const handleSave = async (title: string, content: string) => {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
-
       await createNote(newNote);
     }
 
