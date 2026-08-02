@@ -17,14 +17,15 @@ router.post("/", async (req, res) => {
 // Get All Quiz Results
 router.get("/", async (req, res) => {
   try {
-    const quizzes = await QuizResult.find();
+    const { clerkId } = req.query;
+
+    const quizzes = await QuizResult.find({ clerkId });
 
     res.json(quizzes);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
-
 // Get Single Quiz Result
 router.get("/:id", async (req, res) => {
   try {

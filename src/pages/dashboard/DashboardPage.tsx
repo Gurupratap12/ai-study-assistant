@@ -1,44 +1,23 @@
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import StatCard from "../../components/dashboard/StatCard";
 import FeatureCard from "../../components/dashboard/FeatureCard";
-import { ai } from "../../lib/gemini";
 import { useEffect } from "react";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+
+import { notesService } from "../../services/notesService";
+import { aiService } from "../../services/aiService";
+//import { quizService } from "../../services/quizService";
 
 import {
   NotebookPen,
   Brain,
-  Clock3,
   TrendingUp,
   Bot,
   FileText,
   Sparkles,
 } from "lucide-react";
-
-const stats = [
-  {
-    title: "Study Notes",
-    value: "24",
-    icon: <NotebookPen size={22} />,
-  },
-  {
-    title: "AI Quizzes",
-    value: "12",
-    icon: <Brain size={22} />,
-  },
-  {
-    title: "Study Hours",
-    value: "36h",
-    icon: <Clock3 size={22} />,
-  },
-  {
-    title: "Progress",
-    value: "78%",
-    icon: <TrendingUp size={22} />,
-  },
-];
-
 const features = [
   {
     title: "AI Notes",
@@ -61,26 +40,46 @@ const DashboardPage = () => {
   const { user } = useUser();
   const userName = user?.firstName || user?.username || "Student";
   const navigate = useNavigate();
-
+  const [stats, setStats] = useState({
+    notes: 0,
+    chats: 0,
+    quizzes: 0,
+    progress: 0,
+  });
+  const progress =
+  stats.notes === 0
+    ? 0
+    : Math.min(100, stats.notes * 10);
   useEffect(() => {
     if (isLoaded && !userId) {
       navigate("/login");
     }
   }, [isLoaded, userId, navigate]);
 
-  const testGemini = async () => {
-    try {
-      const response = await ai.models.generateContent({
-        model: "gemini-flash-latest",
-        contents: "What is the capital of Japan?",
-      });
+  useEffect(() => {
+    const loadDashboard = async () => {
+      if (!user) return;
 
-      console.log(response.text);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+      try {
+        const notes = await notesService.getNotes(user.id);
+        const chats = await aiService.getChats(user.id);
+        const totalMessages = chats.reduce(
+          (count: number, chat: any) => count + chat.messages.length,
+          0,
+        );
+        setStats({
+          notes: notes.length,
+          chats: totalMessages,
+          quizzes: 0,
+          progress: 0,
+        });
+      } catch (error) {
+        console.error("Dashboard Error:", error);
+      }
+    };
 
+    loadDashboard();
+  }, [user]);
   return (
     <DashboardLayout>
       {/* Welcome Section */}
@@ -146,9 +145,7 @@ const DashboardPage = () => {
           <div className="grid grid-cols-2 gap-4">
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
               <p className="text-sm text-slate-500">Study Streak</p>
-              <h2 className="mt-2 text-3xl font-bold text-slate-900">
-                12 Days
-              </h2>
+              <h2 className="mt-2 text-3xl font-bold text-slate-900">1 Day</h2>
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
@@ -160,26 +157,45 @@ const DashboardPage = () => {
 
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
               <p className="text-sm text-slate-500">AI Chats</p>
-              <h2 className="mt-2 text-3xl font-bold text-slate-900">146</h2>
+              <h2 className="mt-2 text-3xl font-bold text-slate-900">
+                {stats.chats}
+              </h2>
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
               <p className="text-sm text-slate-500">Completion</p>
-              <h2 className="mt-2 text-3xl font-bold text-blue-600">78%</h2>
+              <h2 className="mt-2 text-3xl font-bold text-blue-600">
+                {progress}%
+              </h2>
             </div>
           </div>
         </div>
       </section>
 
       <section className="mt-8 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-        {stats.map((item) => (
-          <StatCard
-            key={item.title}
-            title={item.title}
-            value={item.value}
-            icon={item.icon}
-          />
-        ))}
+        <StatCard
+          title="Study Notes"
+          value={stats.notes.toString()}
+          icon={<NotebookPen size={22} />}
+        />
+
+        <StatCard
+          title="AI Chats"
+          value={stats.chats.toString()}
+          icon={<Bot size={22} />}
+        />
+
+        <StatCard
+          title="AI Quizzes"
+          value={stats.quizzes.toString()}
+          icon={<Brain size={22} />}
+        />
+
+        <StatCard
+          title="Progress"
+          value={`${stats.progress}%`}
+          icon={<TrendingUp size={22} />}
+        />
       </section>
 
       {/* AI Tools */}
@@ -204,12 +220,6 @@ const DashboardPage = () => {
             />
           ))}
         </div>
-        <button
-          onClick={testGemini}
-          className="rounded-lg bg-blue-600 px-4 py-2 text-white"
-        >
-          Test Gemini
-        </button>
       </section>
     </DashboardLayout>
   );

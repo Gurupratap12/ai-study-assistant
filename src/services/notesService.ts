@@ -1,6 +1,6 @@
 import type { Note } from "../types/note";
 
-const API_URL = "https://ai-study-assistant-dttq.onrender.com/api/notes";
+const API_URL = `${import.meta.env.VITE_API_URL}/notes`;
 
 export const notesService = {
  async getNotes(clerkId: string): Promise<Note[]> {

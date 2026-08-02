@@ -1,18 +1,23 @@
 import { useState } from "react";
+import { useUser } from "@clerk/clerk-react";
 import { quizService } from "../services/quizService";
 import type { QuizQuestion } from "../types/quiz";
 
 export const useQuiz = () => {
+  const { user } = useUser();
+  const [subject, setSubject] = useState("");
+const [difficulty, setDifficulty] = useState("");
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [score, setScore] = useState<number | null>(null);
-
   const generateQuiz = async (
     topic: string,
     difficulty: string,
     count: number,
   ) => {
+      setSubject(topic);
+      setDifficulty(difficulty);
     try {
       setLoading(true);
       setScore(null);
@@ -40,7 +45,7 @@ export const useQuiz = () => {
     }));
   };
 
- const submitQuiz = () => {
+ const submitQuiz = async () => {
   let correct = 0;
 
   questions.forEach((question) => {
@@ -51,21 +56,26 @@ export const useQuiz = () => {
 
   setScore(correct);
 
-  const quizScores = JSON.parse(
-    localStorage.getItem("ai-study-quiz-scores") || "[]"
-  );
-
   const percentage = Math.round(
-  (correct / questions.length) * 100
-);
-
-quizScores.push(percentage);
-  localStorage.setItem(
-    "ai-study-quiz-scores",
-    JSON.stringify(quizScores)
+    (correct / questions.length) * 100
   );
-};
 
+  if (!user) return;
+
+  try {
+    await quizService.saveQuizResult({
+      clerkId: user.id,
+      subject,
+      difficulty,
+      totalQuestions: questions.length,
+      correctAnswers: correct,
+      score: correct,
+      percentage,
+    });
+  } catch (error) {
+    console.error("Failed to save quiz:", error);
+  }
+};
   return {
     questions,
     answers,

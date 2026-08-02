@@ -1,6 +1,6 @@
 import { ai } from "../lib/gemini";
 import type { QuizQuestion } from "../types/quiz";
-
+const API_URL = "https://ai-study-assistant-dttq.onrender.com/api/quizzes";
 export const quizService = {
   async generateQuiz(
     topic: string,
@@ -49,4 +49,30 @@ Return JSON only.
       return [];
     }
   },
+  async saveQuizResult(data: any) {
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to save quiz");
+  }
+
+  return await response.json();
+},
+async getQuizResults(clerkId: string) {
+  const response = await fetch(
+    `${API_URL}?clerkId=${clerkId}`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch quiz history");
+  }
+
+  return await response.json();
+},
 };

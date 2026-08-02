@@ -2,13 +2,17 @@ const mongoose = require("mongoose");
 
 const quizResultSchema = new mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+    clerkId: {
+      type: String,
       required: true,
     },
 
     subject: {
+      type: String,
+      required: true,
+    },
+
+    difficulty: {
       type: String,
       required: true,
     },
@@ -24,6 +28,11 @@ const quizResultSchema = new mongoose.Schema(
     },
 
     score: {
+      type: Number,
+      required: true,
+    },
+
+    percentage: {
       type: Number,
       required: true,
     },
