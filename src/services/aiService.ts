@@ -1,21 +1,33 @@
-import { ai } from "../lib/gemini";
 const API_URL = `${import.meta.env.VITE_API_URL}/chats`;
 export const aiService = {
   async sendMessage(message: string): Promise<string> {
-    
-    try {
-      const response = await ai.models.generateContent({
-        model: "gemini-flash-latest",
-        contents: message,
-      });
+  try {
+    const response = await fetch(
+     "https://ai-study-assistant-dttq.onrender.com/api/ai/chat",  
+     {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message,
+        }),
+      },
+    );
 
-      return response.text || "No response received.";
-    } catch (error) {
-      console.error("Gemini Error:", error);
-
-      return "Sorry, something went wrong. Please try again.";
+    if (!response.ok) {
+      throw new Error("AI request failed");
     }
-  },
+
+    const data = await response.json();
+
+    return data.reply || "No response received.";
+  } catch (error) {
+    console.error("AI Error:", error);
+
+    return "Sorry, something went wrong. Please try again.";
+  }
+},
 
   async getChats(clerkId: string) {
     const response = await fetch(

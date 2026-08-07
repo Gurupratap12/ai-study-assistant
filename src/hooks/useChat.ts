@@ -46,7 +46,7 @@ useEffect(() => {
 
     setMessages(currentMessages);
 
-    // Gemini Response
+   
     const reply = await aiService.sendMessage(text);
 
     const aiMessage: ChatMessage = {
@@ -77,9 +77,19 @@ if (!currentChatId) {
   }
 };
 
-  const clearChat = () => {
-  setMessages([]);
-  localStorage.removeItem("ai-chat");
+  const clearChat = async () => {
+  try {
+    setMessages([]);
+    localStorage.removeItem("ai-chat");
+
+    if (currentChatId) {
+      await aiService.updateChat(currentChatId, {
+        messages: [],
+      });
+    }
+  } catch (error) {
+    console.error("Failed to clear chat:", error);
+  }
 };
 
   return {

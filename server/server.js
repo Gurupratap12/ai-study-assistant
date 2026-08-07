@@ -7,6 +7,7 @@ const noteRoutes = require("./routes/noteRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const quizRoutes = require("./routes/quizRoutes");
 const progressRoutes = require("./routes/progressRoutes");
+const aiRoutes = require("./routes/aiRoutes");
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use("/api/notes", noteRoutes);
 app.use("/api/chats", chatRoutes);
 app.use("/api/quizzes", quizRoutes);
 app.use("/api/progress", progressRoutes);
+app.use("/api/ai", aiRoutes);
 
 // Test Route
 app.get("/", (req, res) => {

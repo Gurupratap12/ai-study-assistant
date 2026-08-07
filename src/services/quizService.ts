@@ -1,54 +1,41 @@
-import { ai } from "../lib/gemini";
 import type { QuizQuestion } from "../types/quiz";
 const API_URL = "https://ai-study-assistant-dttq.onrender.com/api/quizzes";
 export const quizService = {
   async generateQuiz(
-    topic: string,
-    difficulty: string,
-    count: number,
-  ): Promise<QuizQuestion[]> {
-    try {
-      const prompt = `
-Create a ${difficulty} quiz on "${topic}".
+  topic: string,
+  difficulty: string,
+  count: number,
+): Promise<QuizQuestion[]> {
+  try {
+    const response = await fetch(
+      "https://ai-study-assistant-dttq.onrender.com/api/ai/quiz",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          topic,
+          difficulty,
+          count,
+        }),
+      },
+    );
 
-Generate exactly ${count} multiple-choice questions.
-
-Return ONLY valid JSON.
-
-Format:
-
-{
-  "questions": [
-    {
-      "id": "1",
-      "question": "",
-      "options": ["", "", "", ""],
-      "correctAnswer": "",
-      "explanation": ""
+    if (!response.ok) {
+      throw new Error("Quiz generation failed");
     }
-  ]
-}
 
-Do not add markdown.
-Do not wrap in \`\`\`.
-Return JSON only.
-`;
+    const data = await response.json();
 
-      const response = await ai.models.generateContent({
-        model: "gemini-flash-latest",
-        contents: prompt,
-      });
+    console.log("Quiz Provider:", data.provider);
 
-      const text = response.text ?? "";
-
-      const data = JSON.parse(text);
-
-      return data.questions;
-    } catch (error) {
-      console.error("Quiz Error:", error);
-      return [];
-    }
-  },
+    return data.questions || [];
+  } catch (error) {
+    console.error("Quiz Error:", error);
+    return [];
+  }
+},
   async saveQuizResult(data: any) {
   const response = await fetch(API_URL, {
     method: "POST",
