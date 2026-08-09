@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 
 const progressSchema = new mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+    clerkId: {
+      type: String,
       required: true,
+      unique: true,
     },
 
     totalNotes: {
@@ -40,7 +40,7 @@ const progressSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 module.exports = mongoose.model("Progress", progressSchema);

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { progressService } from "../services/progressService";
 import type { ProgressData } from "../types/progress";
 
-export const useProgress = () => {
+export const useProgress = (userId: string | null) => {
   const [progress, setProgress] = useState<ProgressData>({
     notesCount: 0,
     aiChats: 0,
@@ -10,14 +10,20 @@ export const useProgress = () => {
     averageScore: 0,
   });
 
-  const loadProgress = () => {
-    const data = progressService.getProgress();
-    setProgress(data);
+  const loadProgress = async () => {
+    if (!userId) return;
+
+    try {
+      const data = await progressService.getProgress(userId);
+      setProgress(data);
+    } catch (error) {
+      console.error("Progress Error:", error);
+    }
   };
 
   useEffect(() => {
     loadProgress();
-  }, []);
+  }, [userId]);
 
   return {
     progress,

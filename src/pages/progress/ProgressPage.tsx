@@ -1,11 +1,14 @@
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import ProgressCard from "../../components/progress/ProgressCard";
 import { useProgress } from "../../hooks/useProgress";
+import { useUser } from "@clerk/clerk-react";
 
 import { NotebookPen, Bot, Brain, Trophy } from "lucide-react";
 
 const ProgressPage = () => {
-  const { progress } = useProgress();
+  const { user } = useUser();
+
+const { progress } = useProgress(user?.id ?? null);
 
   return (
     <DashboardLayout>

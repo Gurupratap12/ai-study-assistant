@@ -3,64 +3,33 @@ const router = express.Router();
 
 const Progress = require("../models/Progress");
 
-// Create Progress
-router.post("/", async (req, res) => {
-  try {
-    const progress = await Progress.create(req.body);
-
-    res.status(201).json(progress);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Get All Progress
+// Get current user's progress
 router.get("/", async (req, res) => {
   try {
-    const progress = await Progress.find();
+    const { clerkId } = req.query;
+
+    if (!clerkId) {
+      return res.status(400).json({
+        message: "clerkId is required",
+      });
+    }
+
+    let progress = await Progress.findOne({ clerkId });
+
+    // Create progress if it doesn't exist
+    if (!progress) {
+      progress = await Progress.create({
+        clerkId,
+      });
+    }
 
     res.json(progress);
   } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+    console.error("Progress Error:", error);
 
-// Get Single Progress
-router.get("/:id", async (req, res) => {
-  try {
-    const progress = await Progress.findById(req.params.id);
-
-    res.json(progress);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Update Progress
-router.put("/:id", async (req, res) => {
-  try {
-    const progress = await Progress.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-
-    res.json(progress);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Delete Progress
-router.delete("/:id", async (req, res) => {
-  try {
-    await Progress.findByIdAndDelete(req.params.id);
-
-    res.json({
-      message: "Progress Deleted Successfully",
+    res.status(500).json({
+      message: error.message,
     });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
   }
 });
 

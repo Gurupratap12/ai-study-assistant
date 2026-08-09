@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-
 import { notesService } from "../../services/notesService";
 import { aiService } from "../../services/aiService";
 import { quizService } from "../../services/quizService";
@@ -61,15 +60,27 @@ const DashboardPage = () => {
         const notes = await notesService.getNotes(user.id);
         const chats = await aiService.getChats(user.id);
         const quizzes = await quizService.getQuizResults(user.id);
+
         const totalMessages = chats.reduce(
-          (count: number, chat: any) => count + chat.messages.length,
+          (count: number, chat: any) => count + (chat.messages?.length || 0),
           0,
         );
+
+        const averageScore =
+          quizzes.length > 0
+            ? Math.round(
+                quizzes.reduce(
+                  (sum: number, quiz: any) => sum + (quiz.score || 0),
+                  0,
+                ) / quizzes.length,
+              )
+            : 0;
+
         setStats({
           notes: notes.length,
           chats: totalMessages,
           quizzes: quizzes.length,
-          progress: 0,
+          progress: averageScore,
         });
       } catch (error) {
         console.error("Dashboard Error:", error);
