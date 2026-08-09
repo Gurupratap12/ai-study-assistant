@@ -16,15 +16,15 @@ export const progressService = {
     );
 
     const averageScore =
-      quizzes.length > 0
-        ? Math.round(
-            quizzes.reduce(
-              (sum: number, quiz: any) =>
-                sum + (quiz.score || 0),
-              0,
-            ) / quizzes.length,
-          )
-        : 0;
+  quizzes.length > 0
+    ? Math.round(
+        quizzes.reduce(
+          (sum: number, quiz: any) =>
+            sum + (quiz.percentage || 0),
+          0,
+        ) / quizzes.length,
+      )
+    : 0;
 
     return {
       notesCount: notes.length,
