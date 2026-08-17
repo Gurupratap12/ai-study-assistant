@@ -4,6 +4,7 @@ import { useNehuCommand } from "../../hooks/useNehuCommand";
 const NehuCommandTest = () => {
   const [command, setCommand] = useState("");
   const [listening, setListening] = useState(false);
+  const [status, setStatus] = useState("Nehu is ready");
 
   const { executeNehuCommand } = useNehuCommand();
 
@@ -24,27 +25,40 @@ const NehuCommandTest = () => {
 
     recognition.onstart = () => {
       setListening(true);
-      console.log("Nehu: Listening...");
+      setStatus("🎙️ Listening...");
     };
 
     recognition.onresult = (event: any) => {
       const text = event.results[0][0].transcript.toLowerCase().trim();
 
-      console.log("Nehu heard:", text);
-
       setCommand(text);
 
-      executeNehuCommand(text);
+      const wakeWord = "nehu";
+
+      if (!text.includes(wakeWord)) {
+        setStatus("❌ Wake word not detected");
+        return;
+      }
+
+      const actualCommand = text.replace(wakeWord, "").trim();
+
+      if (!actualCommand) {
+        setStatus("✅ Wake word detected — waiting for command");
+        return;
+      }
+
+      setStatus(`✅ Nehu active — Command: ${actualCommand}`);
+
+      executeNehuCommand(actualCommand);
     };
 
     recognition.onerror = (event: any) => {
-      console.log("Nehu error:", event.error);
       setListening(false);
+      setStatus(`❌ Error: ${event.error}`);
     };
 
     recognition.onend = () => {
       setListening(false);
-      console.log("Nehu: Stopped listening.");
     };
 
     recognition.start();
@@ -52,7 +66,13 @@ const NehuCommandTest = () => {
 
   return (
     <div>
-      <p>{command || "No command yet"}</p>
+      <p>
+        <strong>Heard:</strong> {command || "No command yet"}
+      </p>
+
+      <p>
+        <strong>Status:</strong> {status}
+      </p>
 
       <button type="button" onClick={startListening} disabled={listening}>
         {listening ? "🎙️ Listening..." : "🎤 Speak to Nehu"}
