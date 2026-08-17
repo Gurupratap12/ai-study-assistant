@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import MainLayout from "../components/layout/MainLayout";
 import LandingPage from "../pages/landing/LandingPage";
@@ -17,30 +17,30 @@ import ProgressPage from "../pages/progress/ProgressPage";
 
 const AppRoutes = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Public Layout */}
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<LandingPage />} />
-        </Route>
+    //<BrowserRouter>
+    <Routes>
+      {/* Public Layout */}
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<LandingPage />} />
+      </Route>
 
-        {/* Auth Pages */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/verify-email" element={<VerifyEmailPage />} />
-        <Route path="/login-verification" element={<LoginVerificationPage />} />
+      {/* Auth Pages */}
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage />} />
+      <Route path="/verify-email" element={<VerifyEmailPage />} />
+      <Route path="/login-verification" element={<LoginVerificationPage />} />
 
-        {/* Private Pages */}
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/notes" element={<NotesPage />} />
-        <Route path="/ai-assistant" element={<AIAssistantPage />} />
-        <Route path="/quiz" element={<QuizPage />} />
-        <Route path="/study-planner" element={<StudyPlannerPage />} />
-        <Route path="/progress" element={<ProgressPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/settings" element={<SettingsPage />} />
-      </Routes>
-    </BrowserRouter>
+      {/* Private Pages */}
+      <Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/notes" element={<NotesPage />} />
+      <Route path="/ai-assistant" element={<AIAssistantPage />} />
+      <Route path="/quiz" element={<QuizPage />} />
+      <Route path="/study-planner" element={<StudyPlannerPage />} />
+      <Route path="/progress" element={<ProgressPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/settings" element={<SettingsPage />} />
+    </Routes>
+    //</BrowserRouter>
   );
 };
 
