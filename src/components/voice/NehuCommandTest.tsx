@@ -1,6 +1,19 @@
-import {useState } from "react";
+import { useState } from "react";
 import { useNehuCommand } from "../../hooks/useNehuCommand";
+const normalizeNehu = (text: string) => {
+  const variants = ["nehu", "new", "neu", "nehue", "nehoo", "nehuu"];
 
+  let normalizedText = text.toLowerCase().trim();
+
+  for (const variant of variants) {
+    if (normalizedText.includes(variant)) {
+      normalizedText = normalizedText.replace(variant, "nehu");
+      break;
+    }
+  }
+
+  return normalizedText;
+};
 const NehuCommandTest = () => {
   const [command, setCommand] = useState("");
   const [listening, setListening] = useState(false);
@@ -29,7 +42,9 @@ const NehuCommandTest = () => {
     };
 
     recognition.onresult = (event: any) => {
-      const text = event.results[0][0].transcript.toLowerCase().trim();
+      const rawText = event.results[0][0].transcript;
+
+      const text = normalizeNehu(rawText);
 
       setCommand(text);
 
@@ -58,9 +73,9 @@ const NehuCommandTest = () => {
     };
 
     recognition.onend = () => {
-  setListening(false);
-  setStatus("Nehu stopped listening.");
-};
+      setListening(false);
+      setStatus("Nehu stopped listening.");
+    };
 
     recognition.start();
   };
