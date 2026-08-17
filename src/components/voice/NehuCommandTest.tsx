@@ -1,7 +1,17 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNehuCommand } from "../../hooks/useNehuCommand";
+
 const normalizeNehu = (text: string) => {
-  const variants = ["nehu", "new", "neu", "nehue", "nehoo", "nehuu"];
+  const variants = [
+    "nehu",
+    "new",
+    "neu",
+    "nehue",
+    "nehoo",
+    "nehuu",
+    "nimbuu",
+    "neha",
+  ];
 
   let normalizedText = text.toLowerCase().trim();
 
@@ -14,12 +24,16 @@ const normalizeNehu = (text: string) => {
 
   return normalizedText;
 };
+
 const NehuCommandTest = () => {
   const [command, setCommand] = useState("");
   const [listening, setListening] = useState(false);
   const [status, setStatus] = useState("Nehu is ready");
 
   const { executeNehuCommand } = useNehuCommand();
+
+  const recognitionRef = useRef<any>(null);
+  const shouldListenRef = useRef(false);
 
   const startListening = () => {
     const SpeechRecognition =
@@ -30,7 +44,14 @@ const NehuCommandTest = () => {
       return;
     }
 
+    if (shouldListenRef.current) {
+      return;
+    }
+
     const recognition = new SpeechRecognition();
+
+    recognitionRef.current = recognition;
+    shouldListenRef.current = true;
 
     recognition.lang = "en-US";
     recognition.continuous = true;
@@ -43,7 +64,6 @@ const NehuCommandTest = () => {
 
     recognition.onresult = (event: any) => {
       const rawText = event.results[0][0].transcript;
-
       const text = normalizeNehu(rawText);
 
       setCommand(text);
@@ -68,16 +88,37 @@ const NehuCommandTest = () => {
     };
 
     recognition.onerror = (event: any) => {
-      setListening(false);
-      setStatus(`❌ Error: ${event.error}`);
+      console.log("Nehu error:", event.error);
+
+      if (event.error === "not-allowed") {
+        shouldListenRef.current = false;
+        setListening(false);
+        setStatus("❌ Microphone permission denied");
+        return;
+      }
+
+      setStatus(`⚠️ Error: ${event.error}`);
     };
 
     recognition.onend = () => {
-      setListening(false);
-      setStatus("Nehu stopped listening.");
-    };
+      if (!shouldListenRef.current) {
+        setListening(false);
+        setStatus("Nehu stopped listening.");
+        return;
+      }
 
-    recognition.start();
+      setStatus("🔄 Nehu restarting...");
+
+      setTimeout(() => {
+        if (!shouldListenRef.current) return;
+
+        try {
+          recognition.start();
+        } catch (error) {
+          console.log("Nehu restart error:", error);
+        }
+      }, 500);
+    };
   };
 
   return (
