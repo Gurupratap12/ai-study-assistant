@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useState } from "react";
 import { useNehuCommand } from "../../hooks/useNehuCommand";
 
 const NehuCommandTest = () => {
@@ -20,7 +20,7 @@ const NehuCommandTest = () => {
     const recognition = new SpeechRecognition();
 
     recognition.lang = "en-US";
-    recognition.continuous = false;
+    recognition.continuous = true;
     recognition.interimResults = false;
 
     recognition.onstart = () => {
@@ -58,8 +58,9 @@ const NehuCommandTest = () => {
     };
 
     recognition.onend = () => {
-      setListening(false);
-    };
+  setListening(false);
+  setStatus("Nehu stopped listening.");
+};
 
     recognition.start();
   };
