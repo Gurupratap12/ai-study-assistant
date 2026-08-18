@@ -27,6 +27,8 @@ const NehuCommandTest = () => {
   const shouldListenRef = useRef(false);
   const restartingRef = useRef(false);
 
+  const waitingForCommandRef = useRef(false);
+
   const startListening = () => {
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -52,33 +54,63 @@ const NehuCommandTest = () => {
 
     recognition.onstart = () => {
       restartingRef.current = false;
+
       setListening(true);
-      setStatus("🎙️ Nehu is listening...");
+
+      if (waitingForCommandRef.current) {
+        setStatus("🟢 Nehu active — say your command");
+      } else {
+        setStatus("🎙️ Listening for Nehu...");
+      }
     };
 
     recognition.onresult = (event: any) => {
-      const rawText = event.results[0][0].transcript;
+      const rawText = event.results[event.results.length - 1][0].transcript;
+
       const text = normalizeNehu(rawText);
 
       setCommand(text);
 
-      const wakeWord = "nehu";
+      // -----------------------------
+      // MODE 1: Waiting for "Nehu"
+      // -----------------------------
 
-      if (!text.includes(wakeWord)) {
-        setStatus("❌ Wake word not detected");
+      if (!waitingForCommandRef.current) {
+        if (!text.includes("nehu")) {
+          setStatus("🎙️ Listening for Nehu...");
+          return;
+        }
+
+        const commandAfterNehu = text.replace("nehu", "").trim();
+
+        // User only said "Nehu"
+        if (!commandAfterNehu) {
+          waitingForCommandRef.current = true;
+
+          setStatus("🟢 Nehu active — say your command");
+
+          return;
+        }
+
+        // User said "Nehu + command"
+        waitingForCommandRef.current = false;
+
+        setStatus(`✅ Command: ${commandAfterNehu}`);
+
+        executeNehuCommand(commandAfterNehu);
+
         return;
       }
 
-      const actualCommand = text.replace(wakeWord, "").trim();
+      // -----------------------------
+      // MODE 2: Waiting for command
+      // -----------------------------
 
-      if (!actualCommand) {
-        setStatus("✅ Nehu detected — waiting for command");
-        return;
-      }
+      waitingForCommandRef.current = false;
 
-      setStatus(`✅ Command: ${actualCommand}`);
+      setStatus(`✅ Command: ${text}`);
 
-      executeNehuCommand(actualCommand);
+      executeNehuCommand(text);
     };
 
     recognition.onerror = (event: any) => {
@@ -88,7 +120,9 @@ const NehuCommandTest = () => {
         shouldListenRef.current = false;
         restartingRef.current = false;
         setListening(false);
+
         setStatus("❌ Microphone permission denied");
+
         return;
       }
 
@@ -112,6 +146,7 @@ const NehuCommandTest = () => {
       }
 
       restartingRef.current = true;
+
       setStatus("🔄 Nehu restarting...");
 
       setTimeout(() => {
@@ -124,7 +159,9 @@ const NehuCommandTest = () => {
           recognition.start();
         } catch (error) {
           console.log("Restart failed:", error);
+
           restartingRef.current = false;
+
           setStatus("⚠️ Restart failed");
         }
       }, 800);
@@ -136,6 +173,7 @@ const NehuCommandTest = () => {
   const stopListening = () => {
     shouldListenRef.current = false;
     restartingRef.current = false;
+    waitingForCommandRef.current = false;
 
     if (recognitionRef.current) {
       recognitionRef.current.stop();
@@ -149,6 +187,7 @@ const NehuCommandTest = () => {
     return () => {
       shouldListenRef.current = false;
       restartingRef.current = false;
+      waitingForCommandRef.current = false;
 
       if (recognitionRef.current) {
         recognitionRef.current.stop();
@@ -170,7 +209,7 @@ const NehuCommandTest = () => {
         type="button"
         onClick={listening ? stopListening : startListening}
       >
-        {listening ? "🛑 Stop Nehu" : "🎤 Starts Nehu"}
+        {listening ? "🛑 Stop Nehu" : "🎤 Start Nehu"}
       </button>
     </div>
   );
