@@ -17,9 +17,8 @@ const normalizeNehu = (text: string) => {
 };
 
 const NehuCommandTest = () => {
-  const [command, setCommand] = useState("");
   const [listening, setListening] = useState(false);
-  const [status, setStatus] = useState("Nehu is ready");
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const { executeNehuCommand } = useNehuCommand();
 
@@ -53,30 +52,25 @@ const NehuCommandTest = () => {
     recognition.onstart = () => {
       restartingRef.current = false;
       setListening(true);
-      setStatus("🎙️ Nehu is listening...");
     };
 
     recognition.onresult = (event: any) => {
-      const rawText = event.results[0][0].transcript;
-      const text = normalizeNehu(rawText);
+      const rawText =
+        event.results[event.results.length - 1][0].transcript;
 
-      setCommand(text);
+      const text = normalizeNehu(rawText);
 
       const wakeWord = "nehu";
 
       if (!text.includes(wakeWord)) {
-        setStatus("❌ Wake word not detected");
         return;
       }
 
       const actualCommand = text.replace(wakeWord, "").trim();
 
       if (!actualCommand) {
-        setStatus("✅ Nehu detected — waiting for command");
         return;
       }
-
-      setStatus(`✅ Command: ${actualCommand}`);
 
       executeNehuCommand(actualCommand);
     };
@@ -88,22 +82,18 @@ const NehuCommandTest = () => {
         shouldListenRef.current = false;
         restartingRef.current = false;
         setListening(false);
-        setStatus("❌ Microphone permission denied");
         return;
       }
 
       if (event.error === "aborted") {
         return;
       }
-
-      setStatus(`⚠️ Error: ${event.error}`);
     };
 
     recognition.onend = () => {
       setListening(false);
 
       if (!shouldListenRef.current) {
-        setStatus("Nehu stopped.");
         return;
       }
 
@@ -112,7 +102,6 @@ const NehuCommandTest = () => {
       }
 
       restartingRef.current = true;
-      setStatus("🔄 Nehu restarting...");
 
       setTimeout(() => {
         if (!shouldListenRef.current) {
@@ -123,9 +112,8 @@ const NehuCommandTest = () => {
         try {
           recognition.start();
         } catch (error) {
-          console.log("Restart failed:", error);
+          console.log("Nehu restart error:", error);
           restartingRef.current = false;
-          setStatus("⚠️ Restart failed");
         }
       }, 800);
     };
@@ -142,7 +130,6 @@ const NehuCommandTest = () => {
     }
 
     setListening(false);
-    setStatus("Nehu stopped.");
   };
 
   useEffect(() => {
@@ -157,20 +144,44 @@ const NehuCommandTest = () => {
   }, []);
 
   return (
-    <div>
-      <p>
-        <strong>Heard:</strong> {command || "No command yet"}
-      </p>
+    <div className="fixed bottom-6 right-6 z-50">
+      {/* Tooltip */}
+      <div
+        className={`absolute bottom-full right-0 mb-3 whitespace-nowrap rounded-lg bg-gray-900 px-3 py-2 text-sm text-white shadow-lg transition-all duration-200 ${
+          showTooltip
+            ? "visible translate-y-0 opacity-100"
+            : "invisible translate-y-2 opacity-0"
+        }`}
+      >
+        {listening ? "Nehu is listening" : "Nehu"}
+      </div>
 
-      <p>
-        <strong>Status:</strong> {status}
-      </p>
-
+      {/* Nehu Button */}
       <button
         type="button"
         onClick={listening ? stopListening : startListening}
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
+        onTouchStart={() => setShowTooltip(true)}
+        onTouchEnd={() => {
+          setTimeout(() => {
+            setShowTooltip(false);
+          }, 1200);
+        }}
+        aria-label={listening ? "Stop Nehu" : "Start Nehu"}
+        className={`relative flex h-14 w-14 items-center justify-center rounded-full border shadow-lg transition-all duration-300 ${
+          listening
+            ? "border-green-400 bg-green-500 shadow-green-500/40"
+            : "border-gray-300 bg-white shadow-black/10"
+        }`}
       >
-        {listening ? "🛑 Stop Nehu" : "🎤 Starts Nehu"}
+        {listening && (
+          <span className="absolute inset-0 rounded-full animate-ping bg-green-400/30" />
+        )}
+
+        <span className="relative text-2xl">
+          🎙️
+        </span>
       </button>
     </div>
   );
