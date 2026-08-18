@@ -35,7 +35,7 @@ export const useNehuCommand = (
     // Stop listening
     if (
       normalizedCommand.includes("stop listening") ||
-      normalizedCommand.includes("stop nehu")
+      normalizedCommand.includes("stop")
     ) {
       speechService.speak("Okay, stopping Nehu.");
 
