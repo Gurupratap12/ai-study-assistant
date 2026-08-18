@@ -2,11 +2,50 @@ import { useNavigate } from "react-router-dom";
 import { findNehuCommand } from "../services/nehuCommandService";
 import { speechService } from "../services/speechService";
 
-export const useNehuCommand = () => {
+export const useNehuCommand = (
+  stopListening?: () => void,
+) => {
   const navigate = useNavigate();
 
   const executeNehuCommand = (command: string) => {
-    const result = findNehuCommand(command);
+    const normalizedCommand = command.toLowerCase().trim();
+
+    // Go back
+    if (
+      normalizedCommand.includes("go back") ||
+      normalizedCommand === "back"
+    ) {
+      speechService.speak("Going back.");
+      navigate(-1);
+
+      return true;
+    }
+
+    // Go home
+    if (
+      normalizedCommand.includes("go home") ||
+      normalizedCommand === "home"
+    ) {
+      speechService.speak("Going home.");
+      navigate("/dashboard");
+
+      return true;
+    }
+
+    // Stop listening
+    if (
+      normalizedCommand.includes("stop listening") ||
+      normalizedCommand.includes("stop nehu")
+    ) {
+      speechService.speak("Okay, stopping Nehu.");
+
+      stopListening?.();
+
+      return true;
+    }
+
+    // Existing navigation commands
+    const result = findNehuCommand(normalizedCommand);
 
     if (result.type === "navigation" && result.route) {
       navigate(result.route);

@@ -20,11 +20,16 @@ const NehuCommandTest = () => {
   const [listening, setListening] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
 
-  const { executeNehuCommand } = useNehuCommand();
-
   const recognitionRef = useRef<any>(null);
   const shouldListenRef = useRef(false);
   const restartingRef = useRef(false);
+
+  // Stop function reference
+  const stopListeningRef = useRef<() => void>(() => {});
+
+  const { executeNehuCommand } = useNehuCommand(() =>
+    stopListeningRef.current(),
+  );
 
   const startListening = () => {
     const SpeechRecognition =
@@ -55,10 +60,11 @@ const NehuCommandTest = () => {
     };
 
     recognition.onresult = (event: any) => {
-      const rawText =
-        event.results[event.results.length - 1][0].transcript;
+      const rawText = event.results[event.results.length - 1][0].transcript;
 
       const text = normalizeNehu(rawText);
+
+      console.log("Nehu heard:", text);
 
       const wakeWord = "nehu";
 
@@ -132,6 +138,9 @@ const NehuCommandTest = () => {
     setListening(false);
   };
 
+  // Make stopListening available to the hook
+  stopListeningRef.current = stopListening;
+
   useEffect(() => {
     return () => {
       shouldListenRef.current = false;
@@ -176,12 +185,10 @@ const NehuCommandTest = () => {
         }`}
       >
         {listening && (
-          <span className="absolute inset-0 rounded-full animate-ping bg-green-400/30" />
+          <span className="absolute inset-0 animate-ping rounded-full bg-green-400/30" />
         )}
 
-        <span className="relative text-2xl">
-          🎙️
-        </span>
+        <span className="relative text-2xl">🎙️</span>
       </button>
     </div>
   );
