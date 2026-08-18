@@ -170,7 +170,7 @@ const NehuCommandTest = () => {
         type="button"
         onClick={listening ? stopListening : startListening}
       >
-        {listening ? "🛑 Stop Nehu" : "🎤 Start Nehu"}
+        {listening ? "🛑 Stop Nehu" : "🎤 Starts Nehu"}
       </button>
     </div>
   );
