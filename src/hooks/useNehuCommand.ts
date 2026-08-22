@@ -10,7 +10,77 @@ export const useNehuCommand = (
   const executeNehuCommand = (command: string) => {
     const normalizedCommand = command.toLowerCase().trim();
 
-    // Create a new note
+    // --------------------------------
+    // Search notes with a search term
+    // --------------------------------
+    const searchNotesMatch = normalizedCommand.match(
+      /(?:search|find)(?: my)? notes (?:for|about) (.+)/,
+    );
+
+    if (searchNotesMatch) {
+      const searchTerm = searchNotesMatch[1].trim();
+
+      speechService.speak(
+        `Searching your notes for ${searchTerm}.`,
+      );
+
+      navigate("/notes", {
+        state: {
+          action: "search-notes-term",
+          searchTerm,
+        },
+      });
+
+      return true;
+    }
+
+    // --------------------------------
+    // Open a specific note
+    // --------------------------------
+    const openNoteMatch = normalizedCommand.match(
+      /open (?:my )?(.+?) notes?$/,
+    );
+
+    if (openNoteMatch) {
+      const searchTerm = openNoteMatch[1].trim();
+
+      speechService.speak(
+        `Opening your ${searchTerm} note.`,
+      );
+
+      navigate("/notes", {
+        state: {
+          action: "open-note",
+          searchTerm,
+        },
+      });
+
+      return true;
+    }
+
+    // --------------------------------
+    // Search notes
+    // --------------------------------
+    if (
+      normalizedCommand.includes("search my notes") ||
+      normalizedCommand.includes("search notes") ||
+      normalizedCommand.includes("find my notes") ||
+      normalizedCommand.includes("find notes")
+    ) {
+      speechService.speak("Opening your notes search.");
+
+      navigate("/notes", {
+        state: {
+          action: "search-notes",
+        },
+      });
+
+      return true;
+    }
+
+    // --------------------------------
+    // Create note
+    // --------------------------------
     if (
       normalizedCommand.includes("create a note") ||
       normalizedCommand.includes("create note") ||
@@ -28,7 +98,9 @@ export const useNehuCommand = (
       return true;
     }
 
+    // --------------------------------
     // Go back
+    // --------------------------------
     if (
       normalizedCommand.includes("go back") ||
       normalizedCommand === "back"
@@ -39,7 +111,9 @@ export const useNehuCommand = (
       return true;
     }
 
+    // --------------------------------
     // Go home
+    // --------------------------------
     if (
       normalizedCommand.includes("go home") ||
       normalizedCommand === "home"
@@ -50,7 +124,9 @@ export const useNehuCommand = (
       return true;
     }
 
+    // --------------------------------
     // Stop listening
+    // --------------------------------
     if (
       normalizedCommand.includes("stop listening") ||
       normalizedCommand.includes("stop nehu")
@@ -62,7 +138,9 @@ export const useNehuCommand = (
       return true;
     }
 
+    // --------------------------------
     // Existing navigation commands
+    // --------------------------------
     const result = findNehuCommand(normalizedCommand);
 
     if (result.type === "navigation" && result.route) {

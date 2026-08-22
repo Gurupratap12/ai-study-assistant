@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 
@@ -16,6 +16,8 @@ const NotesPage = () => {
   const location = useLocation();
 
   const { notes, createNote, updateNote, deleteNote } = useNotes();
+
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,25 +64,52 @@ const NotesPage = () => {
     setIsModalOpen(true);
   };
 
-  // Handle Nehu actions
   useEffect(() => {
     const action = location.state?.action;
+    const searchTerm = location.state?.searchTerm;
 
     if (action === "create-note") {
       handleCreate();
+    }
 
-      // Clear the navigation state so the modal
-      // doesn't reopen unexpectedly.
+    if (action === "search-notes") {
+      setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 100);
+    }
+
+    if (action === "search-notes-term" && searchTerm) {
+      setSearch(searchTerm);
+
+      setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 100);
+    }
+
+    if (action === "open-note" && searchTerm) {
+      const normalizedSearch = searchTerm.toLowerCase().trim();
+
+      const matchingNote = notes.find((note) =>
+        note.title.toLowerCase().includes(normalizedSearch),
+      );
+
+      if (matchingNote) {
+        setSelectedNote(matchingNote);
+        setIsModalOpen(true);
+      }
+    }
+
+    if (action) {
       window.history.replaceState({}, document.title);
     }
-  }, [location.state]);
+  }, [location.state, notes]);
 
   return (
     <DashboardLayout>
       <div className="space-y-8">
         <NotesHeader onCreateNote={handleCreate} />
 
-        <SearchBar value={search} onChange={setSearch} />
+        <SearchBar ref={searchInputRef} value={search} onChange={setSearch} />
 
         {notes.length === 0 ? (
           <EmptyState onCreateNote={handleCreate} />
@@ -112,4 +141,3 @@ const NotesPage = () => {
 };
 
 export default NotesPage;
-  
