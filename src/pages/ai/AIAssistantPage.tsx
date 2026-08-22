@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 
 import ChatInput from "../../components/ai/ChatInput";
@@ -7,6 +10,21 @@ import { useChat } from "../../hooks/useChat";
 
 const AIAssistantPage = () => {
   const { messages, loading, sendMessage, clearChat } = useChat();
+
+  const location = useLocation();
+
+  const [voiceMessage, setVoiceMessage] = useState("");
+
+  useEffect(() => {
+    const action = location.state?.action;
+    const message = location.state?.message;
+
+    if (action === "ask-ai" && message) {
+      setVoiceMessage(message);
+
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   return (
     <DashboardLayout>
@@ -33,7 +51,12 @@ const AIAssistantPage = () => {
         <ChatWindow messages={messages} loading={loading} />
 
         {/* Input */}
-        <ChatInput onSend={sendMessage} loading={loading} />
+        <ChatInput
+          onSend={sendMessage}
+          loading={loading}
+          value={voiceMessage}
+          onChange={setVoiceMessage}
+        />
       </div>
     </DashboardLayout>
   );

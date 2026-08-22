@@ -11,6 +11,28 @@ export const useNehuCommand = (
     const normalizedCommand = command.toLowerCase().trim();
 
     // --------------------------------
+    // Ask AI
+    // --------------------------------
+    const askAIMatch = normalizedCommand.match(
+      /(?:ask ai|ask assistant|tell ai|ask)(?: about| to explain| explain)? (.+)/,
+    );
+
+    if (askAIMatch) {
+      const question = askAIMatch[1].trim();
+
+      speechService.speak("Opening AI Assistant.");
+
+      navigate("/ai-assistant", {
+        state: {
+          action: "ask-ai",
+          message: question,
+        },
+      });
+
+      return true;
+    }
+
+    // --------------------------------
     // Search notes with a search term
     // --------------------------------
     const searchNotesMatch = normalizedCommand.match(
