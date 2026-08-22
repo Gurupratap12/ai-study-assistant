@@ -154,15 +154,41 @@ const NehuCommandTest = () => {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      {/* Tooltip */}
+      {/* Nehu Command Panel */}
       <div
-        className={`absolute bottom-full right-0 mb-3 whitespace-nowrap rounded-lg bg-gray-900 px-3 py-2 text-sm text-white shadow-lg transition-all duration-200 ${
+        className={`absolute bottom-full right-0 mb-3 w-64 rounded-2xl border border-gray-200 bg-white p-4 shadow-xl transition-all duration-200 ${
           showTooltip
             ? "visible translate-y-0 opacity-100"
             : "invisible translate-y-2 opacity-0"
         }`}
       >
-        {listening ? "Nehu is listening" : "Nehu"}
+        <div className="mb-3 flex items-center gap-2">
+          <div
+            className={`h-2.5 w-2.5 rounded-full ${
+              listening ? "bg-green-500 animate-pulse" : "bg-gray-400"
+            }`}
+          />
+
+          <div>
+            <p className="font-semibold text-gray-900">Nehu</p>
+
+            <p className="text-xs text-gray-500">
+              {listening ? "Listening..." : "Ready"}
+            </p>
+          </div>
+        </div>
+
+        <div className="border-t border-gray-100 pt-3">
+          <p className="mb-2 text-xs font-medium text-gray-500">Try saying:</p>
+
+          <div className="space-y-1.5 text-sm text-gray-700">
+            <p>• “Open my notes”</p>
+            <p>• “Go back”</p>
+            <p>• “Go home”</p>
+            <p>• “Open my quiz”</p>
+            <p>• “Stop listening”</p>
+          </div>
+        </div>
       </div>
 
       {/* Nehu Button */}

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 
 import NotesHeader from "../../components/notes/NotesHeader";
@@ -12,13 +13,17 @@ import type { Note } from "../../types/note";
 
 const NotesPage = () => {
   const { user } = useUser();
+  const location = useLocation();
+
   const { notes, createNote, updateNote, deleteNote } = useNotes();
+
   const [search, setSearch] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedNote, setSelectedNote] = useState<Note | null>(null);
+
   const filteredNotes = notes.filter((note) =>
     note.title.toLowerCase().includes(search.toLowerCase()),
   );
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedNote, setSelectedNote] = useState<Note | null>(null);
 
   const handleSave = async (title: string, content: string) => {
     if (selectedNote) {
@@ -39,6 +44,7 @@ const NotesPage = () => {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
+
       await createNote(newNote);
     }
 
@@ -56,12 +62,26 @@ const NotesPage = () => {
     setIsModalOpen(true);
   };
 
+  // Handle Nehu actions
+  useEffect(() => {
+    const action = location.state?.action;
+
+    if (action === "create-note") {
+      handleCreate();
+
+      // Clear the navigation state so the modal
+      // doesn't reopen unexpectedly.
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
+
   return (
     <DashboardLayout>
       <div className="space-y-8">
         <NotesHeader onCreateNote={handleCreate} />
 
         <SearchBar value={search} onChange={setSearch} />
+
         {notes.length === 0 ? (
           <EmptyState onCreateNote={handleCreate} />
         ) : (
@@ -92,3 +112,4 @@ const NotesPage = () => {
 };
 
 export default NotesPage;
+  

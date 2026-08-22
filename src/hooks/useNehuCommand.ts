@@ -10,6 +10,24 @@ export const useNehuCommand = (
   const executeNehuCommand = (command: string) => {
     const normalizedCommand = command.toLowerCase().trim();
 
+    // Create a new note
+    if (
+      normalizedCommand.includes("create a note") ||
+      normalizedCommand.includes("create note") ||
+      normalizedCommand.includes("new note") ||
+      normalizedCommand.includes("add a note")
+    ) {
+      speechService.speak("Opening a new note.");
+
+      navigate("/notes", {
+        state: {
+          action: "create-note",
+        },
+      });
+
+      return true;
+    }
+
     // Go back
     if (
       normalizedCommand.includes("go back") ||
@@ -35,7 +53,7 @@ export const useNehuCommand = (
     // Stop listening
     if (
       normalizedCommand.includes("stop listening") ||
-      normalizedCommand.includes("stop")
+      normalizedCommand.includes("stop nehu")
     ) {
       speechService.speak("Okay, stopping Nehu.");
 
