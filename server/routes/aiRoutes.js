@@ -1,16 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
-const Groq = require("groq-sdk");
-const { GoogleGenAI } = require("@google/genai");
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+const MODEL = "openai/gpt-4o-mini";
 
-const gemini = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-});
+// ==================== CHAT ====================
 
 router.post("/chat", async (req, res) => {
   const { message } = req.body;
@@ -21,49 +16,56 @@ router.post("/chat", async (req, res) => {
     });
   }
 
-  // 1️⃣ Groq - Primary
   try {
-    const response = await groq.chat.completions.create({
-      model: "llama-3.1-8b-instant",
-      messages: [
-        {
-          role: "user",
-          content: message,
+    const response = await fetch(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+          "Content-Type": "application/json",
         },
-      ],
-    });
+        body: JSON.stringify({
+          model: MODEL,
+          messages: [
+            {
+              role: "user",
+              content: message,
+            },
+          ],
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error("OpenRouter Chat Error:", data);
+
+      return res.status(503).json({
+        message: "OpenRouter is currently unavailable.",
+      });
+    }
 
     const reply =
-      response.choices?.[0]?.message?.content ||
+      data.choices?.[0]?.message?.content ||
       "No response received.";
 
     return res.json({
       reply,
-      provider: "groq",
+      provider: "openrouter",
     });
   } catch (error) {
-    console.error("Groq Error:", error);
-  }
+    console.error("OpenRouter Chat Error:", error);
 
-  // 2️⃣ Gemini - Fallback
-  try {
-    const response = await gemini.models.generateContent({
-      model: "gemini-flash-latest",
-      contents: message,
+    return res.status(503).json({
+      message: "OpenRouter is currently unavailable.",
     });
-
-    return res.json({
-      reply: response.text || "No response received.",
-      provider: "gemini",
-    });
-  } catch (error) {
-    console.error("Gemini Error:", error);
   }
-
-  return res.status(503).json({
-    message: "All AI providers are currently unavailable.",
-  });
 });
+
+// ==================== QUIZ ====================
+
 router.post("/quiz", async (req, res) => {
   const { topic, difficulty, count } = req.body;
 
@@ -95,57 +97,60 @@ Format:
 }
 
 Do not add markdown.
-Do not wrap in \`\`\`.
+Do not wrap in code blocks.
 Return JSON only.
 `;
 
-  // 1️⃣ Groq - Primary
   try {
-    const response = await groq.chat.completions.create({
-      model: "llama-3.1-8b-instant",
-      messages: [
-        {
-          role: "user",
-          content: prompt,
+    const response = await fetch(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+          "Content-Type": "application/json",
         },
-      ],
-    });
+        body: JSON.stringify({
+          model: MODEL,
+          messages: [
+            {
+              role: "user",
+              content: prompt,
+            },
+          ],
+          response_format: {
+            type: "json_object",
+          },
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error("OpenRouter Quiz Error:", data);
+
+      return res.status(503).json({
+        message: "OpenRouter is currently unavailable.",
+      });
+    }
 
     const text =
-      response.choices?.[0]?.message?.content || "";
+      data.choices?.[0]?.message?.content || "";
 
-    const data = JSON.parse(text);
-
-    return res.json({
-      questions: data.questions,
-      provider: "groq",
-    });
-  } catch (error) {
-    console.error("Groq Quiz Error:", error);
-  }
-
-  // 2️⃣ Gemini - Fallback
-  try {
-    const response = await gemini.models.generateContent({
-      model: "gemini-flash-latest",
-      contents: prompt,
-    });
-
-    const text = response.text || "";
-
-    const data = JSON.parse(text);
+    const quizData = JSON.parse(text);
 
     return res.json({
-      questions: data.questions,
-      provider: "gemini",
+      questions: quizData.questions,
+      provider: "openrouter",
     });
   } catch (error) {
-    console.error("Gemini Quiz Error:", error);
-  }
+    console.error("OpenRouter Quiz Error:", error);
 
-  return res.status(503).json({
-    message: "All AI providers are currently unavailable",
-  });
+    return res.status(503).json({
+      message: "OpenRouter is currently unavailable.",
+    });
+  }
 });
 
 module.exports = router;
