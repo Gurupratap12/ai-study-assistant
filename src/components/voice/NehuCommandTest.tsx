@@ -24,7 +24,6 @@ const NehuCommandTest = () => {
   const shouldListenRef = useRef(false);
   const restartingRef = useRef(false);
 
-  // Stop function reference
   const stopListeningRef = useRef<() => void>(() => {});
 
   const { executeNehuCommand } = useNehuCommand(() =>
@@ -138,7 +137,6 @@ const NehuCommandTest = () => {
     setListening(false);
   };
 
-  // Make stopListening available to the hook
   stopListeningRef.current = stopListening;
 
   useEffect(() => {
@@ -156,32 +154,41 @@ const NehuCommandTest = () => {
     <div className="fixed bottom-6 right-6 z-50">
       {/* Nehu Command Panel */}
       <div
-        className={`absolute bottom-full right-0 mb-3 w-64 rounded-2xl border border-gray-200 bg-white p-4 shadow-xl transition-all duration-200 ${
-          showTooltip
-            ? "visible translate-y-0 opacity-100"
-            : "invisible translate-y-2 opacity-0"
-        }`}
+        className={`absolute bottom-full right-0 mb-3 w-64 rounded-2xl border p-4 shadow-xl backdrop-blur-xl transition-all duration-200
+          border-slate-200 bg-white
+          dark:border-slate-700 dark:bg-slate-900
+          ${
+            showTooltip
+              ? "visible translate-y-0 opacity-100"
+              : "invisible translate-y-2 opacity-0"
+          }`}
       >
+        {/* Status */}
         <div className="mb-3 flex items-center gap-2">
           <div
             className={`h-2.5 w-2.5 rounded-full ${
-              listening ? "bg-green-500 animate-pulse" : "bg-gray-400"
+              listening
+                ? "animate-pulse bg-green-500"
+                : "bg-slate-400 dark:bg-slate-500"
             }`}
           />
 
           <div>
-            <p className="font-semibold text-gray-900">Nehu</p>
+            <p className="font-semibold text-slate-900 dark:text-white">Nehu</p>
 
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               {listening ? "Listening..." : "Ready"}
             </p>
           </div>
         </div>
 
-        <div className="border-t border-gray-100 pt-3">
-          <p className="mb-2 text-xs font-medium text-gray-500">Try saying:</p>
+        {/* Divider */}
+        <div className="border-t border-slate-200 pt-3 dark:border-slate-700">
+          <p className="mb-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+            Try saying:
+          </p>
 
-          <div className="space-y-1.5 text-sm text-gray-700">
+          <div className="space-y-1.5 text-sm text-slate-700 dark:text-slate-300">
             <p>• “Open my notes”</p>
             <p>• “Go back”</p>
             <p>• “Go home”</p>
@@ -207,7 +214,7 @@ const NehuCommandTest = () => {
         className={`relative flex h-14 w-14 items-center justify-center rounded-full border shadow-lg transition-all duration-300 ${
           listening
             ? "border-green-400 bg-green-500 shadow-green-500/40"
-            : "border-gray-300 bg-white shadow-black/10"
+            : "border-slate-300 bg-white shadow-black/10 dark:border-slate-700 dark:bg-slate-900 dark:shadow-black/40"
         }`}
       >
         {listening && (

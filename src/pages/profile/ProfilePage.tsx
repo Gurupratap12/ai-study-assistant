@@ -79,109 +79,177 @@ const ProfilePage = () => {
   const userInitial = userName.charAt(0).toUpperCase();
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-4xl font-bold text-slate-900">Profile</h1>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+      <div className="space-y-8">
+        {/* Header */}
+        <div>
+          <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+            Profile
+          </h1>
 
-        <p className="mt-2 text-slate-500">
-          Manage your account and view your study activity.
-        </p>
-      </div>
+          <p className="mt-2 text-slate-500 dark:text-slate-400">
+            Manage your account and view your study activity.
+          </p>
+        </div>
 
-      {/* Profile Header */}
-      <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
-          {/* Avatar */}
-          <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-3xl bg-blue-100 text-4xl font-bold text-blue-600">
-            {userInitial}
-          </div>
+        {/* Profile Header */}
+        <div
+          className="
+        rounded-3xl
+          border border-slate-200
+          bg-white
+          p-8
+          shadow-sm
 
-          {/* User Details */}
-          <div className="flex-1">
-            <h2 className="text-2xl font-bold text-slate-900">{userName}</h2>
+          dark:border-slate-700
+          dark:bg-slate-900
+          dark:shadow-black/20
+        "
+        >
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
+            {/* Avatar */}
+            <div
+              className="
+            flex
+              h-24
+              w-24
+              shrink-0
+              items-center
+              justify-center
+              rounded-3xl
+              bg-blue-100
+              text-4xl
+              font-bold
+              text-blue-600
 
-            <div className="mt-2 flex items-center gap-2 text-slate-500">
-              <Mail size={16} />
-              <span>{userEmail}</span>
+              dark:bg-blue-950
+              dark:text-blue-400
+            "
+            >
+              {userInitial}
             </div>
 
-            <div className="mt-3 flex flex-wrap gap-2">
-              <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
-                Student
-              </span>
+            {/* User Details */}
+            <div className="flex-1">
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+                {userName}
+              </h2>
 
-              <span className="flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
-                <span className="h-2 w-2 rounded-full bg-green-500" />
-                Active
-              </span>
+              <div className="mt-2 flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                <Mail size={16} />
+                <span>{userEmail}</span>
+              </div>
+
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span
+                  className="
+                  rounded-full
+                  bg-blue-100
+                  px-3
+                  py-1
+                  text-sm
+                  font-medium
+                  text-blue-700
+
+                  dark:bg-blue-950
+                  dark:text-blue-300
+                "
+                >
+                  Student
+                </span>
+
+                <span
+                  className="
+                flex
+                items-center
+                gap-1
+                rounded-full
+                bg-green-100
+                px-3
+                py-1
+                  text-sm
+                  font-medium
+                  text-green-700
+
+                  dark:bg-green-950
+                  dark:text-green-300
+                  "
+                >
+                  <span className="h-2 w-2 rounded-full bg-green-500" />
+                  Active
+                </span>
+              </div>
             </div>
           </div>
         </div>
+
+        {/* Account Information */}
+        <section>
+          <h2 className="mb-4 text-2xl font-bold text-slate-900 dark:text-white">
+            Account Information
+          </h2>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <InfoCard
+              icon={<User size={20} />}
+              title="Full Name"
+              value={userName}
+            />
+
+            <InfoCard
+              icon={<Mail size={20} />}
+              title="Email"
+              value={userEmail}
+            />
+
+            <InfoCard
+              icon={<ShieldCheck size={20} />}
+              title="Account Type"
+              value="Student"
+            />
+
+            <InfoCard
+              icon={<ShieldCheck size={20} />}
+              title="Account Status"
+              value="Active"
+              valueClassName="text-green-600 dark:text-green-400"
+            />
+          </div>
+        </section>
+
+        {/* Study Statistics */}
+        <section>
+          <h2 className="mb-4 text-2xl font-bold text-slate-900 dark:text-white">
+            Study Statistics
+          </h2>
+
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <StatCard
+              icon={<FileText size={22} />}
+              title="Notes"
+              value={stats.notes}
+            />
+
+            <StatCard
+              icon={<Bot size={22} />}
+              title="AI Chats"
+              value={stats.chats}
+            />
+
+            <StatCard
+              icon={<Brain size={22} />}
+              title="Quiz Attempts"
+              value={stats.quizzes}
+            />
+
+            <StatCard
+              icon={<Trophy size={22} />}
+              title="Average Score"
+              value={`${stats.averageScore}%`}
+            />
+          </div>
+        </section>
       </div>
-
-      {/* Account Information */}
-      <section>
-        <h2 className="mb-4 text-2xl font-bold text-slate-900">
-          Account Information
-        </h2>
-
-        <div className="grid gap-4 md:grid-cols-2">
-          <InfoCard
-            icon={<User size={20} />}
-            title="Full Name"
-            value={userName}
-          />
-
-          <InfoCard icon={<Mail size={20} />} title="Email" value={userEmail} />
-
-          <InfoCard
-            icon={<ShieldCheck size={20} />}
-            title="Account Type"
-            value="Student"
-          />
-
-          <InfoCard
-            icon={<ShieldCheck size={20} />}
-            title="Account Status"
-            value="Active"
-            valueClassName="text-green-600"
-          />
-        </div>
-      </section>
-
-      {/* Study Statistics */}
-      <section>
-        <h2 className="mb-4 text-2xl font-bold text-slate-900">
-          Study Statistics
-        </h2>
-
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <StatCard
-            icon={<FileText size={22} />}
-            title="Notes"
-            value={stats.notes}
-          />
-
-          <StatCard
-            icon={<Bot size={22} />}
-            title="AI Chats"
-            value={stats.chats}
-          />
-
-          <StatCard
-            icon={<Brain size={22} />}
-            title="Quiz Attempts"
-            value={stats.quizzes}
-          />
-
-          <StatCard
-            icon={<Trophy size={22} />}
-            title="Average Score"
-            value={`${stats.averageScore}%`}
-          />
-        </div>
-      </section>
     </div>
   );
 };
@@ -197,16 +265,46 @@ const InfoCard = ({
   icon,
   title,
   value,
-  valueClassName = "text-slate-900",
+  valueClassName = "text-slate-900 dark:text-white",
 }: InfoCardProps) => {
   return (
-    <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100 text-slate-600">
+    <div
+      className="
+    flex
+        items-center
+        gap-4
+        rounded-2xl
+        border
+        border-slate-200
+        bg-white
+        p-5
+        shadow-sm
+
+        dark:border-slate-700
+        dark:bg-slate-900
+        dark:shadow-black/20
+        "
+    >
+      <div
+        className="
+        flex
+        h-11
+        w-11
+          items-center
+          justify-center
+          rounded-xl
+          bg-slate-100
+          text-slate-600
+
+          dark:bg-slate-800
+          dark:text-slate-300
+          "
+      >
         {icon}
       </div>
 
       <div className="min-w-0">
-        <p className="text-sm text-slate-500">{title}</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400">{title}</p>
 
         <p className={`mt-1 truncate font-semibold ${valueClassName}`}>
           {value}
@@ -224,16 +322,51 @@ interface StatCardProps {
 
 const StatCard = ({ icon, title, value }: StatCardProps) => {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-md">
+    <div
+      className="
+        rounded-2xl
+        border
+        border-slate-200
+        bg-white
+        p-5
+        shadow-sm
+        transition
+        duration-300
+        hover:-translate-y-1
+        hover:shadow-md
+
+        dark:border-slate-700
+        dark:bg-slate-900
+        dark:shadow-black/20
+        dark:hover:border-slate-600
+        dark:hover:bg-slate-800
+        "
+    >
       <div className="flex items-center justify-between">
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100 text-slate-600">
+        <div
+          className="
+            flex
+            h-11
+            w-11
+            items-center
+            justify-center
+            rounded-xl
+            bg-slate-100
+            text-slate-600
+            
+            dark:bg-slate-800
+            dark:text-slate-300
+            "
+        >
           {icon}
         </div>
       </div>
 
-      <p className="mt-5 text-sm text-slate-500">{title}</p>
+      <p className="mt-5 text-sm text-slate-500 dark:text-slate-400">{title}</p>
 
-      <p className="mt-1 text-3xl font-bold text-slate-900">{value}</p>
+      <p className="mt-1 text-3xl font-bold text-slate-900 dark:text-white">
+        {value}
+      </p>
     </div>
   );
 };
