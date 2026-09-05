@@ -18,18 +18,23 @@ const QuizPage = () => {
   return (
     <DashboardLayout>
       <div className="mx-auto max-w-4xl space-y-8">
+        {/* Header */}
         <div>
-          <h1 className="text-4xl font-bold text-slate-900">AI Quiz</h1>
+          <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+            AI Quiz
+          </h1>
 
-          <p className="mt-2 text-slate-500">
+          <p className="mt-2 text-slate-500 dark:text-slate-400">
             Generate quizzes with AI and test your knowledge.
           </p>
         </div>
 
+        {/* Quiz Generator */}
         {questions.length === 0 && (
           <QuizForm onGenerate={generateQuiz} loading={loading} />
         )}
 
+        {/* Quiz Questions */}
         {questions.length > 0 && score === null && (
           <>
             <div className="space-y-6">
@@ -45,13 +50,23 @@ const QuizPage = () => {
 
             <button
               onClick={submitQuiz}
-              className="rounded-xl bg-green-600 px-8 py-3 font-semibold text-white"
+              className="
+                rounded-xl
+                bg-green-600
+                px-8
+                py-3
+                font-semibold
+                text-white
+                transition
+                hover:bg-green-700
+              "
             >
               Submit Quiz
             </button>
           </>
         )}
 
+        {/* Quiz Result */}
         {score !== null && (
           <QuizResult
             score={score}

@@ -10,10 +10,7 @@ interface ChatWindowProps {
   loading: boolean;
 }
 
-const ChatWindow = ({
-  messages,
-  loading,
-}: ChatWindowProps) => {
+const ChatWindow = ({ messages, loading }: ChatWindowProps) => {
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -27,12 +24,19 @@ const ChatWindow = ({
   }
 
   return (
-    <div className="flex-1 space-y-6 overflow-y-auto p-6">
+    <div
+      className="
+        flex-1
+        space-y-6
+        overflow-y-auto
+        bg-white
+        p-6
+
+        dark:bg-slate-950
+      "
+    >
       {messages.map((message) => (
-        <ChatMessageItem
-          key={message.id}
-          message={message}
-        />
+        <ChatMessageItem key={message.id} message={message} />
       ))}
 
       {loading && <TypingIndicator />}

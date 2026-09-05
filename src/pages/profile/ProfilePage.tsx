@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
+import {
+  User,
+  Mail,
+  ShieldCheck,
+  FileText,
+  Bot,
+  Brain,
+  Trophy,
+} from "lucide-react";
 
 import { notesService } from "../../services/notesService";
 import { aiService } from "../../services/aiService";
@@ -12,6 +21,7 @@ const ProfilePage = () => {
     notes: 0,
     chats: 0,
     quizzes: 0,
+    averageScore: 0,
   });
 
   useEffect(() => {
@@ -24,14 +34,34 @@ const ProfilePage = () => {
           aiService.getChats(user.id),
           quizService.getQuizResults(user.id),
         ]);
+
         const totalMessages = chats.reduce(
           (count: number, chat: any) => count + (chat.messages?.length || 0),
           0,
         );
+
+        const percentages = quizzes
+          .map((quiz: any) => quiz.percentage)
+          .filter(
+            (percentage: unknown): percentage is number =>
+              typeof percentage === "number",
+          );
+
+        const averageScore =
+          percentages.length > 0
+            ? Math.round(
+                percentages.reduce(
+                  (sum: number, percentage: number) => sum + percentage,
+                  0,
+                ) / percentages.length,
+              )
+            : 0;
+
         setStats({
           notes: notes.length,
           chats: totalMessages,
           quizzes: quizzes.length,
+          averageScore,
         });
       } catch (error) {
         console.error("Profile Stats Error:", error);
@@ -41,84 +71,169 @@ const ProfilePage = () => {
     loadStats();
   }, [user]);
 
-  const userName = user?.firstName || user?.fullName || "Student";
+  const userName = user?.fullName || user?.firstName || "Student";
+
+  const userEmail =
+    user?.primaryEmailAddress?.emailAddress || "No email available";
 
   const userInitial = userName.charAt(0).toUpperCase();
 
   return (
-    <div>
-      <h1 className="mb-6 text-4xl font-bold text-slate-900">Profile</h1>
+    <div className="space-y-8">
+      {/* Header */}
+      <div>
+        <h1 className="text-4xl font-bold text-slate-900">Profile</h1>
 
-      <div
-        className="
-          rounded-3xl
-          border
-          border-slate-200
-          bg-white
-          p-8
-          shadow-sm
-        "
-      >
-        {/* Avatar */}
-        <div className="flex items-center gap-5">
-          <div
-            className="
-              flex
-              h-24
-              w-24
-              items-center
-              justify-center
-              rounded-3xl
-              bg-linear-to-r
-              from-sky-300
-              via-slate-500
-              to-emerald-300
-              text-4xl
-              font-bold
-              text-white
-            "
-          >
+        <p className="mt-2 text-slate-500">
+          Manage your account and view your study activity.
+        </p>
+      </div>
+
+      {/* Profile Header */}
+      <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
+          {/* Avatar */}
+          <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-3xl bg-blue-100 text-4xl font-bold text-blue-600">
             {userInitial}
           </div>
 
-          <div>
-            <h2 className="text-2xl font-bold">{userName}</h2>
+          {/* User Details */}
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold text-slate-900">{userName}</h2>
 
-            <p className="text-slate-500">Student</p>
-          </div>
-        </div>
+            <div className="mt-2 flex items-center gap-2 text-slate-500">
+              <Mail size={16} />
+              <span>{userEmail}</span>
+            </div>
 
-        {/* Info */}
-        <div className="mt-8 grid gap-4 md:grid-cols-2">
-          <div className="rounded-2xl bg-slate-50 p-5">
-            <p className="text-sm text-slate-500">Account Type</p>
-            <p className="mt-1 font-semibold">Student</p>
-          </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
+                Student
+              </span>
 
-          <div className="rounded-2xl bg-slate-50 p-5">
-            <p className="text-sm text-slate-500">Status</p>
-            <p className="mt-1 font-semibold text-green-600">Active</p>
-          </div>
-        </div>
-
-        {/* Statistics */}
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
-          <div className="rounded-2xl bg-slate-50 p-5">
-            <p className="text-sm text-slate-500">Notes</p>
-            <p className="mt-1 text-2xl font-bold">{stats.notes}</p>
-          </div>
-
-          <div className="rounded-2xl bg-slate-50 p-5">
-            <p className="text-sm text-slate-500">AI Chats</p>
-            <p className="mt-1 text-2xl font-bold">{stats.chats}</p>
-          </div>
-
-          <div className="rounded-2xl bg-slate-50 p-5">
-            <p className="text-sm text-slate-500">Quiz Attempts</p>
-            <p className="mt-1 text-2xl font-bold">{stats.quizzes}</p>
+              <span className="flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
+                <span className="h-2 w-2 rounded-full bg-green-500" />
+                Active
+              </span>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Account Information */}
+      <section>
+        <h2 className="mb-4 text-2xl font-bold text-slate-900">
+          Account Information
+        </h2>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <InfoCard
+            icon={<User size={20} />}
+            title="Full Name"
+            value={userName}
+          />
+
+          <InfoCard icon={<Mail size={20} />} title="Email" value={userEmail} />
+
+          <InfoCard
+            icon={<ShieldCheck size={20} />}
+            title="Account Type"
+            value="Student"
+          />
+
+          <InfoCard
+            icon={<ShieldCheck size={20} />}
+            title="Account Status"
+            value="Active"
+            valueClassName="text-green-600"
+          />
+        </div>
+      </section>
+
+      {/* Study Statistics */}
+      <section>
+        <h2 className="mb-4 text-2xl font-bold text-slate-900">
+          Study Statistics
+        </h2>
+
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <StatCard
+            icon={<FileText size={22} />}
+            title="Notes"
+            value={stats.notes}
+          />
+
+          <StatCard
+            icon={<Bot size={22} />}
+            title="AI Chats"
+            value={stats.chats}
+          />
+
+          <StatCard
+            icon={<Brain size={22} />}
+            title="Quiz Attempts"
+            value={stats.quizzes}
+          />
+
+          <StatCard
+            icon={<Trophy size={22} />}
+            title="Average Score"
+            value={`${stats.averageScore}%`}
+          />
+        </div>
+      </section>
+    </div>
+  );
+};
+
+interface InfoCardProps {
+  icon: React.ReactNode;
+  title: string;
+  value: string;
+  valueClassName?: string;
+}
+
+const InfoCard = ({
+  icon,
+  title,
+  value,
+  valueClassName = "text-slate-900",
+}: InfoCardProps) => {
+  return (
+    <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100 text-slate-600">
+        {icon}
+      </div>
+
+      <div className="min-w-0">
+        <p className="text-sm text-slate-500">{title}</p>
+
+        <p className={`mt-1 truncate font-semibold ${valueClassName}`}>
+          {value}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+interface StatCardProps {
+  icon: React.ReactNode;
+  title: string;
+  value: string | number;
+}
+
+const StatCard = ({ icon, title, value }: StatCardProps) => {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-md">
+      <div className="flex items-center justify-between">
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100 text-slate-600">
+          {icon}
+        </div>
+      </div>
+
+      <p className="mt-5 text-sm text-slate-500">{title}</p>
+
+      <p className="mt-1 text-3xl font-bold text-slate-900">{value}</p>
     </div>
   );
 };

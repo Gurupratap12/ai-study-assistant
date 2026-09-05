@@ -1,10 +1,9 @@
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 import StatCard from "../../components/dashboard/StatCard";
 import FeatureCard from "../../components/dashboard/FeatureCard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { notesService } from "../../services/notesService";
 import { aiService } from "../../services/aiService";
 import { quizService } from "../../services/quizService";
@@ -14,38 +13,48 @@ import {
   Brain,
   TrendingUp,
   Bot,
-  FileText,
+  Mic,
   Sparkles,
 } from "lucide-react";
+
 const features = [
   {
-    title: "AI Notes",
-    description: "Generate smart notes instantly.",
-    icon: <FileText size={22} />,
+    title: "Nehu Commands",
+    description: "See what you can ask Nehu to do.",
+    icon: <Mic size={22} />,
+    route: "/nehu-commands",
   },
   {
     title: "AI Quiz",
     description: "Practice with AI generated quizzes.",
     icon: <Brain size={22} />,
+    route: "/quiz",
   },
   {
     title: "AI Assistant",
     description: "Ask anything and learn faster.",
     icon: <Bot size={22} />,
+    route: "/ai-assistant",
   },
 ];
+
 const DashboardPage = () => {
   const { isLoaded, userId } = useAuth();
   const { user } = useUser();
+
   const userName = user?.firstName || user?.username || "Student";
+
   const navigate = useNavigate();
+
   const [stats, setStats] = useState({
     notes: 0,
     chats: 0,
     quizzes: 0,
     progress: 0,
   });
+
   const progress = stats.notes === 0 ? 0 : Math.min(100, stats.notes * 10);
+
   useEffect(() => {
     if (isLoaded && !userId) {
       navigate("/login");
@@ -89,91 +98,245 @@ const DashboardPage = () => {
 
     loadDashboard();
   }, [user]);
+
   return (
     <DashboardLayout>
       {/* Welcome Section */}
-      <section className="relative overflow-hidden rounded-[30px] border border-slate-200 bg-white px-10 py-12 shadow-sm">
-        <div className="absolute right-0 top-0 h-56 w-56 rounded-full bg-blue-50 blur-3xl" />
+      <section
+        className="
+          relative
+          overflow-hidden
+          rounded-[30px]
+          border
+          border-slate-200
+          bg-white
+          px-10
+          py-12
+          shadow-sm
 
-        <div className="relative z-10 flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+          dark:border-slate-800
+          dark:bg-slate-900
+        "
+      >
+        <div
+          className="
+            absolute
+            right-0
+            top-0
+            h-56
+            w-56
+            rounded-full
+            bg-blue-50
+            blur-3xl
+            dark:bg-blue-950/30
+          "
+        />
+
+        <div
+          className="
+            relative
+            z-10
+            flex
+            flex-col
+            gap-8
+            lg:flex-row
+            lg:items-center
+            lg:justify-between
+          "
+        >
           <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700">
+            {/* Badge */}
+            <span
+              className="
+                inline-flex
+                items-center
+                gap-2
+                rounded-full
+                border
+                border-blue-100
+                bg-blue-50
+                px-4
+                py-2
+                text-sm
+                font-medium
+                text-blue-700
+
+                dark:border-blue-900
+                dark:bg-blue-950
+                dark:text-blue-300
+              "
+            >
               <Sparkles size={16} />
               AI Study Assistant
             </span>
 
-            <h1 className="mt-6 text-5xl font-bold tracking-tight text-slate-900">
+            {/* Heading */}
+            <h1
+              className="
+                mt-6
+                text-5xl
+                font-bold
+                tracking-tight
+                text-slate-900
+
+                dark:text-white
+              "
+            >
               Welcome back, {userName}
             </h1>
 
-            <p className="mt-5 text-lg leading-8 text-slate-600">
+            {/* Description */}
+            <p
+              className="
+                mt-5
+                text-lg
+                leading-8
+                text-slate-600
+
+                dark:text-slate-300
+              "
+            >
               Continue your learning journey with AI. Create smart notes,
               practice quizzes, chat with AI and keep track of your progress in
               one beautiful workspace.
             </p>
 
+            {/* Buttons */}
             <div className="mt-8 flex flex-wrap gap-4">
               <button
                 className="
-          rounded-xl
-          bg-slate-900
-          px-6
-          py-3
-          font-semibold
-          text-white
-          transition-all
-          duration-300
-          hover:-translate-y-0.5
-          hover:bg-slate-800
-          "
+                  rounded-xl
+                  bg-slate-900
+                  px-6
+                  py-3
+                  font-semibold
+                  text-white
+                  transition-all
+                  duration-300
+                  hover:-translate-y-0.5
+                  hover:bg-slate-800
+
+                  dark:bg-white
+                  dark:text-slate-900
+                  dark:hover:bg-slate-200
+                "
               >
                 Start Learning
               </button>
 
               <button
                 className="
-          rounded-xl
-          border
-          border-slate-300
-          bg-white
-          px-6
-          py-3
-          font-semibold
-          text-slate-700
-          transition-all
-          duration-300
-          hover:border-blue-600
-          hover:text-blue-600
-          "
+                  rounded-xl
+                  border
+                  border-slate-300
+                  bg-white
+                  px-6
+                  py-3
+                  font-semibold
+                  text-slate-700
+                  transition-all
+                  duration-300
+                  hover:border-blue-600
+                  hover:text-blue-600
+
+                  dark:border-slate-700
+                  dark:bg-slate-800
+                  dark:text-slate-200
+                  dark:hover:border-blue-500
+                  dark:hover:text-blue-400
+                "
               >
                 Ask AI
               </button>
             </div>
           </div>
 
+          {/* Mini Statistics */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-              <p className="text-sm text-slate-500">Study Streak</p>
-              <h2 className="mt-2 text-3xl font-bold text-slate-900">1 Day</h2>
+            {/* Study Streak */}
+            <div
+              className="
+                rounded-2xl
+                border
+                border-slate-200
+                bg-slate-50
+                p-5
+
+                dark:border-slate-700
+                dark:bg-slate-800
+              "
+            >
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                Study Streak
+              </p>
+
+              <h2 className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
+                1 Day
+              </h2>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-              <p className="text-sm text-slate-500">Today's Goal</p>
-              <h2 className="mt-2 text-3xl font-bold text-slate-900">
+            {/* Today's Goal */}
+            <div
+              className="
+                rounded-2xl
+                border
+                border-slate-200
+                bg-slate-50
+                p-5
+
+                dark:border-slate-700
+                dark:bg-slate-800
+              "
+            >
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                Today's Goal
+              </p>
+
+              <h2 className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
                 2 Hours
               </h2>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-              <p className="text-sm text-slate-500">AI Chats</p>
-              <h2 className="mt-2 text-3xl font-bold text-slate-900">
+            {/* AI Chats */}
+            <div
+              className="
+                rounded-2xl
+                border
+                border-slate-200
+                bg-slate-50
+                p-5
+
+                dark:border-slate-700
+                dark:bg-slate-800
+              "
+            >
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                AI Chats
+              </p>
+
+              <h2 className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
                 {stats.chats}
               </h2>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-              <p className="text-sm text-slate-500">Completion</p>
-              <h2 className="mt-2 text-3xl font-bold text-blue-600">
+            {/* Completion */}
+            <div
+              className="
+                rounded-2xl
+                border
+                border-slate-200
+                bg-slate-50
+                p-5
+
+                dark:border-slate-700
+                dark:bg-slate-800
+              "
+            >
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                Completion
+              </p>
+
+              <h2 className="mt-2 text-3xl font-bold text-blue-600 dark:text-blue-400">
                 {progress}%
               </h2>
             </div>
@@ -181,6 +344,7 @@ const DashboardPage = () => {
         </div>
       </section>
 
+      {/* Statistics */}
       <section className="mt-8 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
           title="Study Notes"
@@ -210,11 +374,11 @@ const DashboardPage = () => {
       {/* AI Tools */}
       <section className="mt-10">
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-slate-900">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
             AI Learning Tools
           </h2>
 
-          <p className="mt-2 text-slate-500">
+          <p className="mt-2 text-slate-500 dark:text-slate-400">
             Everything you need to study smarter.
           </p>
         </div>
@@ -226,6 +390,7 @@ const DashboardPage = () => {
               title={item.title}
               description={item.description}
               icon={item.icon}
+              onClick={() => navigate(item.route)}
             />
           ))}
         </div>

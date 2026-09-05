@@ -9,12 +9,30 @@ interface ProgressCardProps {
 
 const ProgressCard = ({ title, value, icon, color }: ProgressCardProps) => {
   return (
-    <div className="rounded-3xl bg-white p-6 shadow-md transition hover:shadow-xl">
+    <div
+      className="
+        rounded-3xl
+        border
+        border-slate-200
+        bg-white
+        p-6
+        shadow-md
+        transition
+        hover:-translate-y-1
+        hover:shadow-xl
+
+        dark:border-slate-800
+        dark:bg-slate-900
+        dark:hover:bg-slate-800
+      "
+    >
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-slate-500">{title}</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">{title}</p>
 
-          <h2 className="mt-2 text-3xl font-bold text-slate-900">{value}</h2>
+          <h2 className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
+            {value}
+          </h2>
         </div>
 
         <div

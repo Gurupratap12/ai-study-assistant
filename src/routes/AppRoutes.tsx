@@ -14,7 +14,7 @@ import VerifyEmailPage from "../pages/auth/VerifyEmailPage";
 import LoginVerificationPage from "../pages/auth/LoginVerificationPage";
 import QuizPage from "../pages/quiz/QuizPage";
 import ProgressPage from "../pages/progress/ProgressPage";
-
+import NehuCommandsPage from "../pages/nehu/NehuCommandsPage";
 const AppRoutes = () => {
   return (
     //<BrowserRouter>
@@ -39,6 +39,7 @@ const AppRoutes = () => {
       <Route path="/progress" element={<ProgressPage />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/settings" element={<SettingsPage />} />
+      <Route path="/nehu-commands" element={<NehuCommandsPage />} />
     </Routes>
     //</BrowserRouter>
   );

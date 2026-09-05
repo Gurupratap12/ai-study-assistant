@@ -9,12 +9,18 @@ import "./index.css";
 
 const clerkPublishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
+const savedTheme = localStorage.getItem("theme");
+
+if (savedTheme === "dark") {
+  document.documentElement.classList.add("dark");
+}
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ClerkProvider publishableKey={clerkPublishableKey}>
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
-</ClerkProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ClerkProvider>
   </StrictMode>,
 );
