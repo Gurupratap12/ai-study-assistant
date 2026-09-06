@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { useUser } from "@clerk/clerk-react";
+import { useEffect, useState } from 'react';
+import { useUser } from '@clerk/clerk-react';
 
-import type { Note } from "../types/note";
-import { notesService } from "../services/notesService";
+import type { Note } from '../types/note';
+import { notesService } from '../services/notesService';
 
 export const useNotes = () => {
   const { user } = useUser();
@@ -20,7 +20,7 @@ export const useNotes = () => {
 
       setNotes(data);
     } catch (error) {
-      console.error("Failed to fetch notes:", error);
+      console.error('Failed to fetch notes:', error);
     } finally {
       setLoading(false);
     }
@@ -40,10 +40,7 @@ export const useNotes = () => {
     await fetchNotes();
   };
 
-  const updateNote = async (
-    id: string,
-    data: Partial<Note>,
-  ) => {
+  const updateNote = async (id: string, data: Partial<Note>) => {
     await notesService.updateNote(id, data);
 
     await fetchNotes();

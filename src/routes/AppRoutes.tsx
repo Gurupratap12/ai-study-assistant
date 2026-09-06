@@ -1,20 +1,20 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route } from 'react-router-dom';
 
-import MainLayout from "../components/layout/MainLayout";
-import LandingPage from "../pages/landing/LandingPage";
-import LoginPage from "../pages/auth/LoginPage";
-import SignupPage from "../pages/auth/SignupPage";
-import DashboardPage from "../pages/dashboard/DashboardPage";
-import NotesPage from "../pages/notes/NotesPage";
-import AIAssistantPage from "../pages/ai/AIAssistantPage";
-import StudyPlannerPage from "../pages/planner/StudyPlannerPage";
-import ProfilePage from "../pages/profile/ProfilePage";
-import SettingsPage from "../pages/settings/SettingsPage";
-import VerifyEmailPage from "../pages/auth/VerifyEmailPage";
-import LoginVerificationPage from "../pages/auth/LoginVerificationPage";
-import QuizPage from "../pages/quiz/QuizPage";
-import ProgressPage from "../pages/progress/ProgressPage";
-import NehuCommandsPage from "../pages/nehu/NehuCommandsPage";
+import MainLayout from '../components/layout/MainLayout';
+import LandingPage from '../pages/landing/LandingPage';
+import LoginPage from '../pages/auth/LoginPage';
+import SignupPage from '../pages/auth/SignupPage';
+import DashboardPage from '../pages/dashboard/DashboardPage';
+import NotesPage from '../pages/notes/NotesPage';
+import AIAssistantPage from '../pages/ai/AIAssistantPage';
+import StudyPlannerPage from '../pages/planner/StudyPlannerPage';
+import ProfilePage from '../pages/profile/ProfilePage';
+import SettingsPage from '../pages/settings/SettingsPage';
+import VerifyEmailPage from '../pages/auth/VerifyEmailPage';
+import LoginVerificationPage from '../pages/auth/LoginVerificationPage';
+import QuizPage from '../pages/quiz/QuizPage';
+import ProgressPage from '../pages/progress/ProgressPage';
+import NehuCommandsPage from '../pages/nehu/NehuCommandsPage';
 const AppRoutes = () => {
   return (
     //<BrowserRouter>

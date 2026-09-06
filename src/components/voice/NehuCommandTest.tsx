@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from "react";
-import { useNehuCommand } from "../../hooks/useNehuCommand";
+import { useEffect, useRef, useState } from 'react';
+import { useNehuCommand } from '../../hooks/useNehuCommand';
 
 const normalizeNehu = (text: string) => {
-  const variants = ["nehu", "new", "neu", "nehue", "nehoo", "nehuu"];
+  const variants = ['nehu', 'new', 'neu', 'nehue', 'nehoo', 'nehuu'];
 
   let normalizedText = text.toLowerCase().trim();
 
   for (const variant of variants) {
     if (normalizedText.includes(variant)) {
-      normalizedText = normalizedText.replace(variant, "nehu");
+      normalizedText = normalizedText.replace(variant, 'nehu');
       break;
     }
   }
@@ -26,16 +26,13 @@ const NehuCommandTest = () => {
 
   const stopListeningRef = useRef<() => void>(() => {});
 
-  const { executeNehuCommand } = useNehuCommand(() =>
-    stopListeningRef.current(),
-  );
+  const { executeNehuCommand } = useNehuCommand(() => stopListeningRef.current());
 
   const startListening = () => {
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      alert("Speech recognition is not supported in this browser.");
+      alert('Speech recognition is not supported in this browser.');
       return;
     }
 
@@ -49,7 +46,7 @@ const NehuCommandTest = () => {
 
     recognitionRef.current = recognition;
 
-    recognition.lang = "en-US";
+    recognition.lang = 'en-US';
     recognition.continuous = true;
     recognition.interimResults = false;
 
@@ -63,15 +60,15 @@ const NehuCommandTest = () => {
 
       const text = normalizeNehu(rawText);
 
-      console.log("Nehu heard:", text);
+      console.log('Nehu heard:', text);
 
-      const wakeWord = "nehu";
+      const wakeWord = 'nehu';
 
       if (!text.includes(wakeWord)) {
         return;
       }
 
-      const actualCommand = text.replace(wakeWord, "").trim();
+      const actualCommand = text.replace(wakeWord, '').trim();
 
       if (!actualCommand) {
         return;
@@ -81,16 +78,16 @@ const NehuCommandTest = () => {
     };
 
     recognition.onerror = (event: any) => {
-      console.log("Nehu error:", event.error);
+      console.log('Nehu error:', event.error);
 
-      if (event.error === "not-allowed") {
+      if (event.error === 'not-allowed') {
         shouldListenRef.current = false;
         restartingRef.current = false;
         setListening(false);
         return;
       }
 
-      if (event.error === "aborted") {
+      if (event.error === 'aborted') {
         return;
       }
     };
@@ -117,7 +114,7 @@ const NehuCommandTest = () => {
         try {
           recognition.start();
         } catch (error) {
-          console.log("Nehu restart error:", error);
+          console.log('Nehu restart error:', error);
           restartingRef.current = false;
         }
       }, 800);
@@ -157,36 +154,22 @@ const NehuCommandTest = () => {
         className={`absolute bottom-full right-0 mb-3 w-64 rounded-2xl border p-4 shadow-xl backdrop-blur-xl transition-all duration-200
           border-slate-200 bg-white
           dark:border-slate-700 dark:bg-slate-900
-          ${
-            showTooltip
-              ? "visible translate-y-0 opacity-100"
-              : "invisible translate-y-2 opacity-0"
-          }`}
+          ${showTooltip ? 'visible translate-y-0 opacity-100' : 'invisible translate-y-2 opacity-0'}`}
       >
         {/* Status */}
         <div className="mb-3 flex items-center gap-2">
-          <div
-            className={`h-2.5 w-2.5 rounded-full ${
-              listening
-                ? "animate-pulse bg-green-500"
-                : "bg-slate-400 dark:bg-slate-500"
-            }`}
-          />
+          <div className={`h-2.5 w-2.5 rounded-full ${listening ? 'animate-pulse bg-green-500' : 'bg-slate-400 dark:bg-slate-500'}`} />
 
           <div>
             <p className="font-semibold text-slate-900 dark:text-white">Nehu</p>
 
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              {listening ? "Listening..." : "Ready"}
-            </p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">{listening ? 'Listening...' : 'Ready'}</p>
           </div>
         </div>
 
         {/* Divider */}
         <div className="border-t border-slate-200 pt-3 dark:border-slate-700">
-          <p className="mb-2 text-xs font-medium text-slate-500 dark:text-slate-400">
-            Try saying:
-          </p>
+          <p className="mb-2 text-xs font-medium text-slate-500 dark:text-slate-400">Try saying:</p>
 
           <div className="space-y-1.5 text-sm text-slate-700 dark:text-slate-300">
             <p>• “Open my notes”</p>
@@ -210,16 +193,12 @@ const NehuCommandTest = () => {
             setShowTooltip(false);
           }, 1200);
         }}
-        aria-label={listening ? "Stop Nehu" : "Start Nehu"}
+        aria-label={listening ? 'Stop Nehu' : 'Start Nehu'}
         className={`relative flex h-14 w-14 items-center justify-center rounded-full border shadow-lg transition-all duration-300 ${
-          listening
-            ? "border-green-400 bg-green-500 shadow-green-500/40"
-            : "border-slate-300 bg-white shadow-black/10 dark:border-slate-700 dark:bg-slate-900 dark:shadow-black/40"
+          listening ? 'border-green-400 bg-green-500 shadow-green-500/40' : 'border-slate-300 bg-white shadow-black/10 dark:border-slate-700 dark:bg-slate-900 dark:shadow-black/40'
         }`}
       >
-        {listening && (
-          <span className="absolute inset-0 animate-ping rounded-full bg-green-400/30" />
-        )}
+        {listening && <span className="absolute inset-0 animate-ping rounded-full bg-green-400/30" />}
 
         <span className="relative text-2xl">🎙️</span>
       </button>

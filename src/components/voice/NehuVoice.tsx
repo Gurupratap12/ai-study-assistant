@@ -1,4 +1,4 @@
-import { useNehu } from "../../hooks/useNehu";
+import { useNehu } from '../../hooks/useNehu';
 
 const NehuVoice = () => {
   useNehu();

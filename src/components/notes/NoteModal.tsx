@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import type { Note } from "../../types/note";
+import { useEffect, useState } from 'react';
+import type { Note } from '../../types/note';
 
 interface NoteModalProps {
   isOpen: boolean;
@@ -9,16 +9,16 @@ interface NoteModalProps {
 }
 
 const NoteModal = ({ isOpen, note, onClose, onSave }: NoteModalProps) => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
 
   useEffect(() => {
     if (note) {
       setTitle(note.title);
       setContent(note.content);
     } else {
-      setTitle("");
-      setContent("");
+      setTitle('');
+      setContent('');
     }
   }, [note, isOpen]);
 
@@ -39,9 +39,7 @@ const NoteModal = ({ isOpen, note, onClose, onSave }: NoteModalProps) => {
           dark:bg-slate-900
         "
       >
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-          {note ? "Edit Note" : "Create Note"}
-        </h2>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{note ? 'Edit Note' : 'Create Note'}</h2>
 
         <div className="mt-6 space-y-5">
           <input

@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { Plus } from 'lucide-react';
 
 interface NotesHeaderProps {
   onCreateNote: () => void;
@@ -8,13 +8,9 @@ const NotesHeader = ({ onCreateNote }: NotesHeaderProps) => {
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-          My Notes
-        </h1>
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">My Notes</h1>
 
-        <p className="mt-1 text-slate-500 dark:text-slate-400">
-          Create, organize and manage your study notes.
-        </p>
+        <p className="mt-1 text-slate-500 dark:text-slate-400">Create, organize and manage your study notes.</p>
       </div>
 
       <button

@@ -1,5 +1,5 @@
-import DashboardLayout from "../../components/dashboard/DashboardLayout";
-import { Mic, Navigation, FileText, Bot, Square } from "lucide-react";
+import DashboardLayout from '../../components/dashboard/DashboardLayout';
+import { Mic, Navigation, FileText, Bot, Square } from 'lucide-react';
 
 const NehuCommandsPage = () => {
   return (
@@ -13,13 +13,9 @@ const NehuCommandsPage = () => {
             </div>
 
             <div>
-              <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
-                Nehu Voice Commands
-              </h1>
+              <h1 className="text-4xl font-bold text-slate-900 dark:text-white">Nehu Voice Commands</h1>
 
-              <p className="mt-1 text-slate-500 dark:text-slate-400">
-                Discover what you can ask Nehu to do.
-              </p>
+              <p className="mt-1 text-slate-500 dark:text-slate-400">Discover what you can ask Nehu to do.</p>
             </div>
           </div>
         </div>
@@ -35,13 +31,10 @@ const NehuCommandsPage = () => {
             dark:bg-blue-950/30
           "
         >
-          <h2 className="text-lg font-bold text-slate-900 dark:text-white">
-            🎙️ How to use Nehu
-          </h2>
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white">🎙️ How to use Nehu</h2>
 
           <p className="mt-2 text-slate-600 dark:text-slate-300">
-            Start your command with <b>"Nehu"</b> and then tell the assistant
-            what you want to do.
+            Start your command with <b>"Nehu"</b> and then tell the assistant what you want to do.
           </p>
 
           <div
@@ -68,17 +61,17 @@ const NehuCommandsPage = () => {
           icon={<Navigation size={22} />}
           title="Navigation Commands"
           commands={[
-            ["Nehu, go home", "Opens the Dashboard/Home page."],
-            ["Nehu, home", "Opens the Dashboard."],
-            ["Nehu, go back", "Returns to the previous page."],
-            ["Nehu, back", "Returns to the previous page."],
-            ["Nehu, open my notes", "Opens the Notes section."],
-            ["Nehu, open quiz", "Opens the Quiz section."],
-            ["Nehu, open AI Assistant", "Opens the AI Assistant."],
-            ["Nehu, open study planner", "Opens the Study Planner."],
-            ["Nehu, open progress", "Opens the Progress section."],
-            ["Nehu, open profile", "Opens your Profile."],
-            ["Nehu, open settings", "Opens Settings."],
+            ['Nehu, go home', 'Opens the Dashboard/Home page.'],
+            ['Nehu, home', 'Opens the Dashboard.'],
+            ['Nehu, go back', 'Returns to the previous page.'],
+            ['Nehu, back', 'Returns to the previous page.'],
+            ['Nehu, open my notes', 'Opens the Notes section.'],
+            ['Nehu, open quiz', 'Opens the Quiz section.'],
+            ['Nehu, open AI Assistant', 'Opens the AI Assistant.'],
+            ['Nehu, open study planner', 'Opens the Study Planner.'],
+            ['Nehu, open progress', 'Opens the Progress section.'],
+            ['Nehu, open profile', 'Opens your Profile.'],
+            ['Nehu, open settings', 'Opens Settings.'],
           ]}
         />
 
@@ -87,31 +80,16 @@ const NehuCommandsPage = () => {
           icon={<FileText size={22} />}
           title="Notes Commands"
           commands={[
-            ["Nehu, create a note", "Opens the New Note window."],
-            ["Nehu, create note", "Opens the New Note window."],
-            ["Nehu, new note", "Opens the New Note window."],
-            ["Nehu, add a note", "Opens the New Note window."],
-            ["Nehu, search my notes", "Opens Notes and activates note search."],
-            [
-              "Nehu, search my notes for Physics",
-              "Searches notes for the specified topic.",
-            ],
-            [
-              "Nehu, search notes for Mathematics",
-              "Filters notes according to the topic.",
-            ],
-            [
-              "Nehu, find my notes for DBMS",
-              "Searches for DBMS-related notes.",
-            ],
-            [
-              "Nehu, open my Physics notes",
-              "Finds and opens a matching Physics note.",
-            ],
-            [
-              "Nehu, open my DBMS notes",
-              "Finds and opens a matching DBMS note.",
-            ],
+            ['Nehu, create a note', 'Opens the New Note window.'],
+            ['Nehu, create note', 'Opens the New Note window.'],
+            ['Nehu, new note', 'Opens the New Note window.'],
+            ['Nehu, add a note', 'Opens the New Note window.'],
+            ['Nehu, search my notes', 'Opens Notes and activates note search.'],
+            ['Nehu, search my notes for Physics', 'Searches notes for the specified topic.'],
+            ['Nehu, search notes for Mathematics', 'Filters notes according to the topic.'],
+            ['Nehu, find my notes for DBMS', 'Searches for DBMS-related notes.'],
+            ['Nehu, open my Physics notes', 'Finds and opens a matching Physics note.'],
+            ['Nehu, open my DBMS notes', 'Finds and opens a matching DBMS note.'],
           ]}
         />
 
@@ -120,23 +98,11 @@ const NehuCommandsPage = () => {
           icon={<Bot size={22} />}
           title="AI Assistant Commands"
           commands={[
-            [
-              "Nehu, ask AI explain Binary Search",
-              "Opens AI Assistant with the request.",
-            ],
-            [
-              "Nehu, ask AI about Photosynthesis",
-              "Opens AI Assistant with the topic.",
-            ],
-            [
-              "Nehu, ask Assistant about Recursion",
-              "Prepares the question in AI Assistant.",
-            ],
-            ["Nehu, tell AI about DBMS", "Opens AI Assistant with the query."],
-            [
-              "Nehu, ask explain Linked List",
-              "Places the question in AI Assistant.",
-            ],
+            ['Nehu, ask AI explain Binary Search', 'Opens AI Assistant with the request.'],
+            ['Nehu, ask AI about Photosynthesis', 'Opens AI Assistant with the topic.'],
+            ['Nehu, ask Assistant about Recursion', 'Prepares the question in AI Assistant.'],
+            ['Nehu, tell AI about DBMS', 'Opens AI Assistant with the query.'],
+            ['Nehu, ask explain Linked List', 'Places the question in AI Assistant.'],
           ]}
         />
 
@@ -145,8 +111,8 @@ const NehuCommandsPage = () => {
           icon={<Square size={22} />}
           title="Voice Control Commands"
           commands={[
-            ["Nehu, stop listening", "Stops Nehu's voice recognition."],
-            ["Nehu, stop Nehu", "Stops Nehu from listening."],
+            ['Nehu, stop listening', "Stops Nehu's voice recognition."],
+            ['Nehu, stop Nehu', 'Stops Nehu from listening.'],
           ]}
         />
       </div>
@@ -182,9 +148,7 @@ const CommandSection = ({ icon, title, commands }: CommandSectionProps) => {
           {icon}
         </div>
 
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-          {title}
-        </h2>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{title}</h2>
       </div>
 
       {/* Commands */}
@@ -211,13 +175,9 @@ const CommandSection = ({ icon, title, commands }: CommandSectionProps) => {
               dark:hover:bg-slate-800
             "
           >
-            <p className="font-semibold text-slate-900 dark:text-white">
-              "{command}"
-            </p>
+            <p className="font-semibold text-slate-900 dark:text-white">"{command}"</p>
 
-            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-              {description}
-            </p>
+            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{description}</p>
           </div>
         ))}
       </div>

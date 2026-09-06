@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
 interface FeatureCardProps {
   title: string;
@@ -7,12 +7,7 @@ interface FeatureCardProps {
   onClick?: () => void;
 }
 
-const FeatureCard = ({
-  title,
-  description,
-  icon,
-  onClick,
-}: FeatureCardProps) => {
+const FeatureCard = ({ title, description, icon, onClick }: FeatureCardProps) => {
   return (
     <div
       onClick={onClick}
@@ -51,13 +46,9 @@ const FeatureCard = ({
         {icon}
       </div>
 
-      <h3 className="mt-5 text-xl font-bold text-slate-900 dark:text-white">
-        {title}
-      </h3>
+      <h3 className="mt-5 text-xl font-bold text-slate-900 dark:text-white">{title}</h3>
 
-      <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-        {description}
-      </p>
+      <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">{description}</p>
     </div>
   );
 };

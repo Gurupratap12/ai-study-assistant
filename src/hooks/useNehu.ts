@@ -1,17 +1,15 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 const useNehu = () => {
   useEffect(() => {
-    const SpeechRecognition =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      console.log("Nehu: Speech Recognition is not supported.");
+      console.log('Nehu: Speech Recognition is not supported.');
       return;
     }
 
-    console.log("Nehu: Speech Recognition is available.");
+    console.log('Nehu: Speech Recognition is available.');
   }, []);
 };
 

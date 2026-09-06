@@ -1,4 +1,4 @@
-import { FileText } from "lucide-react";
+import { FileText } from 'lucide-react';
 
 interface EmptyStateProps {
   onCreateNote: () => void;
@@ -28,14 +28,9 @@ const EmptyState = ({ onCreateNote }: EmptyStateProps) => {
         <FileText size={40} className="text-slate-500 dark:text-slate-400" />
       </div>
 
-      <h2 className="mt-6 text-2xl font-bold text-slate-900 dark:text-white">
-        No Notes Yet
-      </h2>
+      <h2 className="mt-6 text-2xl font-bold text-slate-900 dark:text-white">No Notes Yet</h2>
 
-      <p className="mt-2 max-w-md text-slate-500 dark:text-slate-400">
-        Start creating your first study note. Organize your ideas and keep
-        everything in one place.
-      </p>
+      <p className="mt-2 max-w-md text-slate-500 dark:text-slate-400">Start creating your first study note. Organize your ideas and keep everything in one place.</p>
 
       <button
         onClick={onCreateNote}

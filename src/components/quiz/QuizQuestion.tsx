@@ -1,4 +1,4 @@
-import type { QuizQuestion as Question } from "../../types/quiz";
+import type { QuizQuestion as Question } from '../../types/quiz';
 
 interface QuizQuestionProps {
   question: Question;
@@ -6,11 +6,7 @@ interface QuizQuestionProps {
   onSelect: (answer: string) => void;
 }
 
-const QuizQuestion = ({
-  question,
-  selectedAnswer,
-  onSelect,
-}: QuizQuestionProps) => {
+const QuizQuestion = ({ question, selectedAnswer, onSelect }: QuizQuestionProps) => {
   return (
     <div
       className="
@@ -24,9 +20,7 @@ const QuizQuestion = ({
         dark:bg-slate-900
       "
     >
-      <h3 className="mb-5 text-lg font-semibold text-slate-900 dark:text-white">
-        {question.question}
-      </h3>
+      <h3 className="mb-5 text-lg font-semibold text-slate-900 dark:text-white">{question.question}</h3>
 
       <div className="space-y-3">
         {question.options.map((option) => (
@@ -53,13 +47,7 @@ const QuizQuestion = ({
               dark:hover:bg-slate-700
             "
           >
-            <input
-              type="radio"
-              name={question.id}
-              checked={selectedAnswer === option}
-              onChange={() => onSelect(option)}
-              className="accent-blue-600"
-            />
+            <input type="radio" name={question.id} checked={selectedAnswer === option} onChange={() => onSelect(option)} className="accent-blue-600" />
 
             <span>{option}</span>
           </label>

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { SendHorizontal } from "lucide-react";
+import { useEffect, useState } from 'react';
+import { SendHorizontal } from 'lucide-react';
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -9,7 +9,7 @@ interface ChatInputProps {
 }
 
 const ChatInput = ({ onSend, loading, value, onChange }: ChatInputProps) => {
-  const [message, setMessage] = useState(value || "");
+  const [message, setMessage] = useState(value || '');
 
   useEffect(() => {
     if (value !== undefined) {
@@ -27,7 +27,7 @@ const ChatInput = ({ onSend, loading, value, onChange }: ChatInputProps) => {
 
     onSend(message);
 
-    updateMessage("");
+    updateMessage('');
   };
 
   return (
@@ -71,7 +71,7 @@ const ChatInput = ({ onSend, loading, value, onChange }: ChatInputProps) => {
           dark:focus:border-blue-500
         "
         onKeyDown={(e) => {
-          if (e.key === "Enter" && !e.shiftKey) {
+          if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             handleSend();
           }

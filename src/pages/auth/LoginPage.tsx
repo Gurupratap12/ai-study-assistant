@@ -1,8 +1,8 @@
-import AuthLayout from "../../components/auth/AuthLayout";
-import LoginForm from "../../components/auth/LoginForm";
-import { useAuth } from "@clerk/clerk-react";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import AuthLayout from '../../components/auth/AuthLayout';
+import LoginForm from '../../components/auth/LoginForm';
+import { useAuth } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const LoginPage = () => {
   const { isLoaded, userId } = useAuth();
@@ -10,7 +10,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (isLoaded && userId) {
-      navigate("/dashboard");
+      navigate('/dashboard');
     }
   }, [isLoaded, userId, navigate]);
   return (

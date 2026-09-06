@@ -1,25 +1,25 @@
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
-import DashboardLayout from "../../components/dashboard/DashboardLayout";
+import DashboardLayout from '../../components/dashboard/DashboardLayout';
 
-import ChatInput from "../../components/ai/ChatInput";
-import ChatWindow from "../../components/ai/ChatWindow";
+import ChatInput from '../../components/ai/ChatInput';
+import ChatWindow from '../../components/ai/ChatWindow';
 
-import { useChat } from "../../hooks/useChat";
+import { useChat } from '../../hooks/useChat';
 
 const AIAssistantPage = () => {
   const { messages, loading, sendMessage, clearChat } = useChat();
 
   const location = useLocation();
 
-  const [voiceMessage, setVoiceMessage] = useState("");
+  const [voiceMessage, setVoiceMessage] = useState('');
 
   useEffect(() => {
     const action = location.state?.action;
     const message = location.state?.message;
 
-    if (action === "ask-ai" && message) {
+    if (action === 'ask-ai' && message) {
       setVoiceMessage(message);
 
       window.history.replaceState({}, document.title);
@@ -61,13 +61,9 @@ const AIAssistantPage = () => {
           "
         >
           <div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-              AI Assistant
-            </h1>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">AI Assistant</h1>
 
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              Ask anything and learn faster.
-            </p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Ask anything and learn faster.</p>
           </div>
 
           <button
@@ -98,12 +94,7 @@ const AIAssistantPage = () => {
         <ChatWindow messages={messages} loading={loading} />
 
         {/* Input */}
-        <ChatInput
-          onSend={sendMessage}
-          loading={loading}
-          value={voiceMessage}
-          onChange={setVoiceMessage}
-        />
+        <ChatInput onSend={sendMessage} loading={loading} value={voiceMessage} onChange={setVoiceMessage} />
       </div>
     </DashboardLayout>
   );

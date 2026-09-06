@@ -1,22 +1,22 @@
 const routes: Record<string, string> = {
-  dashboard: "/dashboard",
-  home: "/dashboard",
+  dashboard: '/dashboard',
+  home: '/dashboard',
 
-  notes: "/notes",
-  "my notes": "/notes",
+  notes: '/notes',
+  'my notes': '/notes',
 
-  quiz: "/quiz",
-  "ai quiz": "/quiz",
+  quiz: '/quiz',
+  'ai quiz': '/quiz',
 
-  "ai assistant": "/ai-assistant",
-  assistant: "/ai-assistant",
+  'ai assistant': '/ai-assistant',
+  assistant: '/ai-assistant',
 
-  "study planner": "/study-planner",
-  planner: "/study-planner",
+  'study planner': '/study-planner',
+  planner: '/study-planner',
 
-  progress: "/progress",
-  profile: "/profile",
-  settings: "/settings",
+  progress: '/progress',
+  profile: '/profile',
+  settings: '/settings',
 };
 
 export const findNehuCommand = (command: string) => {
@@ -25,14 +25,14 @@ export const findNehuCommand = (command: string) => {
   for (const [keyword, route] of Object.entries(routes)) {
     if (normalizedCommand.includes(keyword)) {
       return {
-        type: "navigation",
+        type: 'navigation',
         route,
       };
     }
   }
 
   return {
-    type: "unknown",
+    type: 'unknown',
     route: null,
   };
 };

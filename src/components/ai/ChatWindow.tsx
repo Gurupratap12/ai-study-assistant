@@ -1,9 +1,9 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
-import type { ChatMessage } from "../../types/chat";
-import ChatMessageItem from "./ChatMessage";
-import EmptyChat from "./EmptyChat";
-import TypingIndicator from "./TypingIndicator";
+import type { ChatMessage } from '../../types/chat';
+import ChatMessageItem from './ChatMessage';
+import EmptyChat from './EmptyChat';
+import TypingIndicator from './TypingIndicator';
 
 interface ChatWindowProps {
   messages: ChatMessage[];
@@ -15,7 +15,7 @@ const ChatWindow = ({ messages, loading }: ChatWindowProps) => {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({
-      behavior: "smooth",
+      behavior: 'smooth',
     });
   }, [messages, loading]);
 

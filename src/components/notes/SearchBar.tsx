@@ -1,18 +1,17 @@
-import { forwardRef } from "react";
-import { Search } from "lucide-react";
+import { forwardRef } from 'react';
+import { Search } from 'lucide-react';
 
 interface SearchBarProps {
   value: string;
   onChange: (value: string) => void;
 }
 
-const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
-  ({ value, onChange }, ref) => {
-    return (
-      <div className="relative">
-        <Search
-          size={18}
-          className="
+const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(({ value, onChange }, ref) => {
+  return (
+    <div className="relative">
+      <Search
+        size={18}
+        className="
             absolute
             left-4
             top-1/2
@@ -20,15 +19,15 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
             text-slate-400
             dark:text-slate-500
           "
-        />
+      />
 
-        <input
-          ref={ref}
-          type="text"
-          placeholder="Search your notes..."
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="
+      <input
+        ref={ref}
+        type="text"
+        placeholder="Search your notes..."
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="
             w-full
             rounded-xl
             border
@@ -54,12 +53,11 @@ const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
             dark:focus:border-blue-500
             dark:focus:ring-blue-900/30
           "
-        />
-      </div>
-    );
-  },
-);
+      />
+    </div>
+  );
+});
 
-SearchBar.displayName = "SearchBar";
+SearchBar.displayName = 'SearchBar';
 
 export default SearchBar;

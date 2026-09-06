@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { progressService } from "../services/progressService";
-import type { ProgressData } from "../types/progress";
+import { useEffect, useState } from 'react';
+import { progressService } from '../services/progressService';
+import type { ProgressData } from '../types/progress';
 
 export const useProgress = (userId: string | null) => {
   const [progress, setProgress] = useState<ProgressData>({
@@ -17,7 +17,7 @@ export const useProgress = (userId: string | null) => {
       const data = await progressService.getProgress(userId);
       setProgress(data);
     } catch (error) {
-      console.error("Progress Error:", error);
+      console.error('Progress Error:', error);
     }
   };
 

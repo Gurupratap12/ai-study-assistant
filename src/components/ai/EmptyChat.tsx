@@ -1,4 +1,4 @@
-import { Bot } from "lucide-react";
+import { Bot } from 'lucide-react';
 
 const EmptyChat = () => {
   return (
@@ -17,14 +17,9 @@ const EmptyChat = () => {
         <Bot size={40} />
       </div>
 
-      <h2 className="mt-6 text-2xl font-bold text-slate-900 dark:text-white">
-        AI Assistant
-      </h2>
+      <h2 className="mt-6 text-2xl font-bold text-slate-900 dark:text-white">AI Assistant</h2>
 
-      <p className="mt-2 max-w-md text-slate-500 dark:text-slate-400">
-        Ask any study-related question and I'll help you with explanations,
-        notes, summaries, and more.
-      </p>
+      <p className="mt-2 max-w-md text-slate-500 dark:text-slate-400">Ask any study-related question and I'll help you with explanations, notes, summaries, and more.</p>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import type { QuizQuestion } from "../../types/quiz";
+import type { QuizQuestion } from '../../types/quiz';
 
 interface QuizResultProps {
   score: number;
@@ -7,12 +7,7 @@ interface QuizResultProps {
   onRetake: () => void;
 }
 
-const QuizResult = ({
-  score,
-  questions,
-  answers,
-  onRetake,
-}: QuizResultProps) => {
+const QuizResult = ({ score, questions, answers, onRetake }: QuizResultProps) => {
   const percentage = Math.round((score / questions.length) * 100);
 
   return (
@@ -32,17 +27,13 @@ const QuizResult = ({
           dark:bg-slate-900
         "
       >
-        <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
-          🎉 Quiz Completed
-        </h2>
+        <h2 className="text-3xl font-bold text-slate-900 dark:text-white">🎉 Quiz Completed</h2>
 
         <p className="mt-4 text-5xl font-bold text-zinc-600 dark:text-zinc-300">
           {score} / {questions.length}
         </p>
 
-        <p className="mt-2 text-lg text-slate-500 dark:text-slate-400">
-          {percentage}% Score
-        </p>
+        <p className="mt-2 text-lg text-slate-500 dark:text-slate-400">{percentage}% Score</p>
 
         <button
           onClick={onRetake}
@@ -81,32 +72,19 @@ const QuizResult = ({
               dark:bg-slate-900
             "
           >
-            <h3 className="font-semibold text-slate-900 dark:text-white">
-              {question.question}
-            </h3>
+            <h3 className="font-semibold text-slate-900 dark:text-white">{question.question}</h3>
 
             <p className="mt-3 text-slate-700 dark:text-slate-300">
-              <strong>Your Answer:</strong>{" "}
-              {answers[question.id] || "Not Answered"}
+              <strong>Your Answer:</strong> {answers[question.id] || 'Not Answered'}
             </p>
 
             <p className="mt-2 text-slate-700 dark:text-slate-300">
               <strong>Correct Answer:</strong> {question.correctAnswer}
             </p>
 
-            <p
-              className={`mt-2 font-semibold ${
-                correct
-                  ? "text-green-600 dark:text-green-400"
-                  : "text-red-600 dark:text-red-400"
-              }`}
-            >
-              {correct ? "✅ Correct" : "❌ Wrong"}
-            </p>
+            <p className={`mt-2 font-semibold ${correct ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>{correct ? '✅ Correct' : '❌ Wrong'}</p>
 
-            <p className="mt-4 text-slate-600 dark:text-slate-400">
-              💡 {question.explanation}
-            </p>
+            <p className="mt-4 text-slate-600 dark:text-slate-400">💡 {question.explanation}</p>
           </div>
         );
       })}

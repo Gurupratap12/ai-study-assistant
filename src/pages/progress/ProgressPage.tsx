@@ -1,9 +1,9 @@
-import DashboardLayout from "../../components/dashboard/DashboardLayout";
-import ProgressCard from "../../components/progress/ProgressCard";
-import { useProgress } from "../../hooks/useProgress";
-import { useUser } from "@clerk/clerk-react";
+import DashboardLayout from '../../components/dashboard/DashboardLayout';
+import ProgressCard from '../../components/progress/ProgressCard';
+import { useProgress } from '../../hooks/useProgress';
+import { useUser } from '@clerk/clerk-react';
 
-import { NotebookPen, Bot, Brain, Trophy } from "lucide-react";
+import { NotebookPen, Bot, Brain, Trophy } from 'lucide-react';
 
 const ProgressPage = () => {
   const { user } = useUser();
@@ -16,13 +16,9 @@ const ProgressPage = () => {
         {/* Header */}
 
         <div>
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
-            Study Progress
-          </h1>
+          <h1 className="text-4xl font-bold text-slate-900 dark:text-white">Study Progress</h1>
 
-          <p className="mt-2 text-slate-500 dark:text-slate-400">
-            Track your learning journey and achievements.
-          </p>
+          <p className="mt-2 text-slate-500 dark:text-slate-400">Track your learning journey and achievements.</p>
         </div>
 
         {/* Cards */}

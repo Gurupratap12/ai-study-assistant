@@ -8,6 +8,6 @@ export interface QuizQuestion {
 
 export interface Quiz {
   topic: string;
-  difficulty: "Easy" | "Medium" | "Hard";
+  difficulty: 'Easy' | 'Medium' | 'Hard';
   questions: QuizQuestion[];
 }

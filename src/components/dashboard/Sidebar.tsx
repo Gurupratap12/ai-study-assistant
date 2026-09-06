@@ -1,37 +1,31 @@
-import { NavLink } from "react-router-dom";
-import { useClerk } from "@clerk/clerk-react";
-import {
-  LayoutDashboard,
-  NotebookPen,
-  Bot,
-  Brain,
-  ChartColumn,
-} from "lucide-react";
+import { NavLink } from 'react-router-dom';
+import { useClerk } from '@clerk/clerk-react';
+import { LayoutDashboard, NotebookPen, Bot, Brain, ChartColumn } from 'lucide-react';
 
 const sidebarItems = [
   {
-    name: "Dashboard",
-    path: "/dashboard",
+    name: 'Dashboard',
+    path: '/dashboard',
     icon: LayoutDashboard,
   },
   {
-    name: "Notes",
-    path: "/notes",
+    name: 'Notes',
+    path: '/notes',
     icon: NotebookPen,
   },
   {
-    name: "AI Assistant",
-    path: "/ai-assistant",
+    name: 'AI Assistant',
+    path: '/ai-assistant',
     icon: Bot,
   },
   {
-    name: "AI Quiz",
-    path: "/quiz",
+    name: 'AI Quiz',
+    path: '/quiz',
     icon: Brain,
   },
   {
-    name: "Progress",
-    path: "/progress",
+    name: 'Progress',
+    path: '/progress',
     icon: ChartColumn,
   },
 ];
@@ -61,7 +55,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         transition-transform
         duration-300
 
-        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
 
         md:sticky
         md:block
@@ -91,9 +85,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           <span className="text-blue-600">Assistant</span>
         </h1>
 
-        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-          Learn smarter with AI
-        </p>
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Learn smarter with AI</p>
       </div>
 
       {/* Menu */}
@@ -120,11 +112,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 transition-all
                 duration-300
 
-                ${
-                  isActive
-                    ? "bg-blue-500 text-white"
-                    : "text-slate-600 hover:bg-slate-100 hover:shadow-md dark:text-slate-300 dark:hover:bg-slate-800"
-                }
+                ${isActive ? 'bg-blue-500 text-white' : 'text-slate-600 hover:bg-slate-100 hover:shadow-md dark:text-slate-300 dark:hover:bg-slate-800'}
                 `
               }
             >
@@ -143,7 +131,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       <button
         onClick={() =>
           signOut(() => {
-            window.location.href = "/";
+            window.location.href = '/';
           })
         }
         className="

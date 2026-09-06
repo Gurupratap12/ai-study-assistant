@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 interface QuizFormProps {
   onGenerate: (topic: string, difficulty: string, count: number) => void;
@@ -6,8 +6,8 @@ interface QuizFormProps {
 }
 
 const QuizForm = ({ onGenerate, loading }: QuizFormProps) => {
-  const [topic, setTopic] = useState("");
-  const [difficulty, setDifficulty] = useState("Medium");
+  const [topic, setTopic] = useState('');
+  const [difficulty, setDifficulty] = useState('Medium');
   const [count, setCount] = useState(5);
 
   const handleSubmit = () => {
@@ -29,15 +29,11 @@ const QuizForm = ({ onGenerate, loading }: QuizFormProps) => {
         dark:bg-slate-900
       "
     >
-      <h2 className="mb-6 text-2xl font-bold text-slate-900 dark:text-white">
-        AI Quiz Generator
-      </h2>
+      <h2 className="mb-6 text-2xl font-bold text-slate-900 dark:text-white">AI Quiz Generator</h2>
 
       {/* Topic */}
       <div className="mb-5">
-        <label className="mb-2 block font-medium text-slate-700 dark:text-slate-200">
-          Topic
-        </label>
+        <label className="mb-2 block font-medium text-slate-700 dark:text-slate-200">Topic</label>
 
         <input
           type="text"
@@ -68,9 +64,7 @@ const QuizForm = ({ onGenerate, loading }: QuizFormProps) => {
 
       {/* Difficulty */}
       <div className="mb-5">
-        <label className="mb-2 block font-medium text-slate-700 dark:text-slate-200">
-          Difficulty
-        </label>
+        <label className="mb-2 block font-medium text-slate-700 dark:text-slate-200">Difficulty</label>
 
         <select
           value={difficulty}
@@ -98,9 +92,7 @@ const QuizForm = ({ onGenerate, loading }: QuizFormProps) => {
 
       {/* Questions */}
       <div className="mb-6">
-        <label className="mb-2 block font-medium text-slate-700 dark:text-slate-200">
-          Questions
-        </label>
+        <label className="mb-2 block font-medium text-slate-700 dark:text-slate-200">Questions</label>
 
         <select
           value={count}
@@ -142,7 +134,7 @@ const QuizForm = ({ onGenerate, loading }: QuizFormProps) => {
           disabled:opacity-50
         "
       >
-        {loading ? "Generating..." : "Generate Quiz"}
+        {loading ? 'Generating...' : 'Generate Quiz'}
       </button>
     </div>
   );

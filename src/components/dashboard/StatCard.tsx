@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
 interface StatCardProps {
   title: string;
@@ -30,9 +30,7 @@ const StatCard = ({ title, value, icon }: StatCardProps) => {
         <div>
           <p className="text-sm text-slate-500 dark:text-slate-400">{title}</p>
 
-          <h3 className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
-            {value}
-          </h3>
+          <h3 className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">{value}</h3>
         </div>
 
         <div

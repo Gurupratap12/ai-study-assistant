@@ -1,7 +1,7 @@
 export const speechService = {
   speak(text: string) {
-    if (!("speechSynthesis" in window)) {
-      console.log("Speech synthesis is not supported.");
+    if (!('speechSynthesis' in window)) {
+      console.log('Speech synthesis is not supported.');
       return;
     }
 
@@ -9,7 +9,7 @@ export const speechService = {
 
     const utterance = new SpeechSynthesisUtterance(text);
 
-    utterance.lang = "en-US";
+    utterance.lang = 'en-US';
     utterance.rate = 1;
     utterance.pitch = 1;
     utterance.volume = 1;

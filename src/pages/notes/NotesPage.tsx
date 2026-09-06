@@ -1,15 +1,15 @@
-import { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
-import DashboardLayout from "../../components/dashboard/DashboardLayout";
+import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import DashboardLayout from '../../components/dashboard/DashboardLayout';
 
-import NotesHeader from "../../components/notes/NotesHeader";
-import SearchBar from "../../components/notes/SearchBar";
-import EmptyState from "../../components/notes/EmptyState";
-import NoteCard from "../../components/notes/NoteCard";
-import NoteModal from "../../components/notes/NoteModal";
-import { useUser } from "@clerk/clerk-react";
-import { useNotes } from "../../hooks/useNotes";
-import type { Note } from "../../types/note";
+import NotesHeader from '../../components/notes/NotesHeader';
+import SearchBar from '../../components/notes/SearchBar';
+import EmptyState from '../../components/notes/EmptyState';
+import NoteCard from '../../components/notes/NoteCard';
+import NoteModal from '../../components/notes/NoteModal';
+import { useUser } from '@clerk/clerk-react';
+import { useNotes } from '../../hooks/useNotes';
+import type { Note } from '../../types/note';
 
 const NotesPage = () => {
   const { user } = useUser();
@@ -19,13 +19,11 @@ const NotesPage = () => {
 
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
 
-  const filteredNotes = notes.filter((note) =>
-    note.title.toLowerCase().includes(search.toLowerCase()),
-  );
+  const filteredNotes = notes.filter((note) => note.title.toLowerCase().includes(search.toLowerCase()));
 
   const handleSave = async (title: string, content: string) => {
     if (selectedNote) {
@@ -38,10 +36,10 @@ const NotesPage = () => {
     } else {
       const newNote = {
         clerkId: user?.id,
-        id: "",
+        id: '',
         title,
         content,
-        category: "General",
+        category: 'General',
         pinned: false,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
@@ -68,17 +66,17 @@ const NotesPage = () => {
     const action = location.state?.action;
     const searchTerm = location.state?.searchTerm;
 
-    if (action === "create-note") {
+    if (action === 'create-note') {
       handleCreate();
     }
 
-    if (action === "search-notes") {
+    if (action === 'search-notes') {
       setTimeout(() => {
         searchInputRef.current?.focus();
       }, 100);
     }
 
-    if (action === "search-notes-term" && searchTerm) {
+    if (action === 'search-notes-term' && searchTerm) {
       setSearch(searchTerm);
 
       setTimeout(() => {
@@ -86,12 +84,10 @@ const NotesPage = () => {
       }, 100);
     }
 
-    if (action === "open-note" && searchTerm) {
+    if (action === 'open-note' && searchTerm) {
       const normalizedSearch = searchTerm.toLowerCase().trim();
 
-      const matchingNote = notes.find((note) =>
-        note.title.toLowerCase().includes(normalizedSearch),
-      );
+      const matchingNote = notes.find((note) => note.title.toLowerCase().includes(normalizedSearch));
 
       if (matchingNote) {
         setSelectedNote(matchingNote);
@@ -116,12 +112,7 @@ const NotesPage = () => {
         ) : (
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {filteredNotes.map((note) => (
-              <NoteCard
-                key={note.id}
-                note={note}
-                onEdit={handleEdit}
-                onDelete={deleteNote}
-              />
+              <NoteCard key={note.id} note={note} onEdit={handleEdit} onDelete={deleteNote} />
             ))}
           </div>
         )}

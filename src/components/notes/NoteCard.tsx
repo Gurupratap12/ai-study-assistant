@@ -1,5 +1,5 @@
-import type { Note } from "../../types/note";
-import { Pencil, Trash2, Pin } from "lucide-react";
+import type { Note } from '../../types/note';
+import { Pencil, Trash2, Pin } from 'lucide-react';
 
 interface NoteCardProps {
   note: Note;
@@ -30,23 +30,15 @@ const NoteCard = ({ note, onEdit, onDelete }: NoteCardProps) => {
       "
     >
       <div className="flex items-start justify-between">
-        <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-          {note.title}
-        </h3>
+        <h3 className="text-lg font-bold text-slate-900 dark:text-white">{note.title}</h3>
 
-        {note.pinned && (
-          <Pin size={18} className="fill-yellow-400 text-yellow-400" />
-        )}
+        {note.pinned && <Pin size={18} className="fill-yellow-400 text-yellow-400" />}
       </div>
 
-      <p className="mt-3 line-clamp-4 text-sm text-slate-600 dark:text-slate-300">
-        {note.content}
-      </p>
+      <p className="mt-3 line-clamp-4 text-sm text-slate-600 dark:text-slate-300">{note.content}</p>
 
       <div className="mt-5 flex items-center justify-between">
-        <span className="text-xs text-slate-400 dark:text-slate-500">
-          {note.createdAt}
-        </span>
+        <span className="text-xs text-slate-400 dark:text-slate-500">{note.createdAt}</span>
 
         <div className="flex gap-2">
           <button

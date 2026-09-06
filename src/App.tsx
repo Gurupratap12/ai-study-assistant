@@ -1,13 +1,7 @@
-import AppRoutes from "./routes/AppRoutes";
-import NehuCommandTest from "./components/voice/NehuCommandTest";
+import AppRoutes from './routes/AppRoutes';
 
 function App() {
-  return (
-    <>
-      <NehuCommandTest />
-      <AppRoutes />
-    </>
-  );
+  return <AppRoutes />;
 }
 
 export default App;

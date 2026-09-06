@@ -1,6 +1,3 @@
 export const isSpeechRecognitionSupported = () => {
-  return Boolean(
-    window.SpeechRecognition ||
-      window.webkitSpeechRecognition,
-  );
+  return Boolean(window.SpeechRecognition || window.webkitSpeechRecognition);
 };

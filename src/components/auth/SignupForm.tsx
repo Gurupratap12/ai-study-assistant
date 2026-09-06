@@ -1,17 +1,16 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import Button from "../ui/Button";
-import Card from "../ui/Card";
-import { useSignUp } from "@clerk/clerk-react";
-
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import Button from '../ui/Button';
+import Card from '../ui/Card';
+import { useSignUp } from '@clerk/clerk-react';
 
 const SignupForm = () => {
   const { signUp } = useSignUp();
   const [showPassword, setShowPassword] = useState(false);
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const [loading, setLoading] = useState(false);
 
@@ -19,7 +18,7 @@ const SignupForm = () => {
     e.preventDefault();
 
     if (!name || !email || !password) {
-      alert("Please fill all fields");
+      alert('Please fill all fields');
       return;
     }
     if (!signUp) return;
@@ -33,14 +32,14 @@ const SignupForm = () => {
       });
 
       await signUp.prepareEmailAddressVerification({
-        strategy: "email_code",
+        strategy: 'email_code',
       });
 
-      alert("Verification code sent to your email");
-      window.location.href = "/verify-email";
+      alert('Verification code sent to your email');
+      window.location.href = '/verify-email';
     } catch (error: any) {
       console.error(error);
-      alert(error.errors?.[0]?.message || "Signup failed");
+      alert(error.errors?.[0]?.message || 'Signup failed');
     } finally {
       setLoading(false);
     }
@@ -51,17 +50,13 @@ const SignupForm = () => {
       <div className="text-center">
         <h2 className="text-3xl font-bold text-slate-900">Create Account 🚀</h2>
 
-        <p className="mt-3 text-slate-600">
-          Start your AI learning journey today.
-        </p>
+        <p className="mt-3 text-slate-600">Start your AI learning journey today.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-5">
         {/* Name */}
         <div>
-          <label className="mb-2 block font-medium text-slate-700">
-            Full Name
-          </label>
+          <label className="mb-2 block font-medium text-slate-700">Full Name</label>
 
           <input
             type="text"
@@ -87,42 +82,33 @@ const SignupForm = () => {
 
         {/* Password */}
         <div>
-          <label className="mb-2 block font-medium text-slate-700">
-            Password
-          </label>
+          <label className="mb-2 block font-medium text-slate-700">Password</label>
 
           <div className="relative">
             <input
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Create password"
               className="w-full rounded-xl border border-slate-300 px-4 py-3 pr-20 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             />
 
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium text-blue-600"
-            >
-              {showPassword ? "Hide" : "Show"}
+            <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium text-blue-600">
+              {showPassword ? 'Hide' : 'Show'}
             </button>
           </div>
         </div>
 
         {/* Signup Button */}
         <Button className="w-full" disabled={loading}>
-          {loading ? "Creating..." : "Create Account"}
+          {loading ? 'Creating...' : 'Create Account'}
         </Button>
       </form>
 
       {/* Login Link */}
       <p className="mt-6 text-center text-slate-600">
-        Already have an account?{" "}
-        <Link
-          to="/login"
-          className="font-semibold text-blue-600 hover:underline"
-        >
+        Already have an account?{' '}
+        <Link to="/login" className="font-semibold text-blue-600 hover:underline">
           Login
         </Link>
       </p>

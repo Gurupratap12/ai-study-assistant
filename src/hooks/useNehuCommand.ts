@@ -1,10 +1,8 @@
-import { useNavigate } from "react-router-dom";
-import { findNehuCommand } from "../services/nehuCommandService";
-import { speechService } from "../services/speechService";
+import { useNavigate } from 'react-router-dom';
+import { findNehuCommand } from '../services/nehuCommandService';
+import { speechService } from '../services/speechService';
 
-export const useNehuCommand = (
-  stopListening?: () => void,
-) => {
+export const useNehuCommand = (stopListening?: () => void) => {
   const navigate = useNavigate();
 
   const executeNehuCommand = (command: string) => {
@@ -13,18 +11,16 @@ export const useNehuCommand = (
     // --------------------------------
     // Ask AI
     // --------------------------------
-    const askAIMatch = normalizedCommand.match(
-      /(?:ask ai|ask assistant|tell ai|ask)(?: about| to explain| explain)? (.+)/,
-    );
+    const askAIMatch = normalizedCommand.match(/(?:ask ai|ask assistant|tell ai|ask)(?: about| to explain| explain)? (.+)/);
 
     if (askAIMatch) {
       const question = askAIMatch[1].trim();
 
-      speechService.speak("Opening AI Assistant.");
+      speechService.speak('Opening AI Assistant.');
 
-      navigate("/ai-assistant", {
+      navigate('/ai-assistant', {
         state: {
-          action: "ask-ai",
+          action: 'ask-ai',
           message: question,
         },
       });
@@ -35,20 +31,16 @@ export const useNehuCommand = (
     // --------------------------------
     // Search notes with a search term
     // --------------------------------
-    const searchNotesMatch = normalizedCommand.match(
-      /(?:search|find)(?: my)? notes (?:for|about) (.+)/,
-    );
+    const searchNotesMatch = normalizedCommand.match(/(?:search|find)(?: my)? notes (?:for|about) (.+)/);
 
     if (searchNotesMatch) {
       const searchTerm = searchNotesMatch[1].trim();
 
-      speechService.speak(
-        `Searching your notes for ${searchTerm}.`,
-      );
+      speechService.speak(`Searching your notes for ${searchTerm}.`);
 
-      navigate("/notes", {
+      navigate('/notes', {
         state: {
-          action: "search-notes-term",
+          action: 'search-notes-term',
           searchTerm,
         },
       });
@@ -59,20 +51,16 @@ export const useNehuCommand = (
     // --------------------------------
     // Open a specific note
     // --------------------------------
-    const openNoteMatch = normalizedCommand.match(
-      /open (?:my )?(.+?) notes?$/,
-    );
+    const openNoteMatch = normalizedCommand.match(/open (?:my )?(.+?) notes?$/);
 
     if (openNoteMatch) {
       const searchTerm = openNoteMatch[1].trim();
 
-      speechService.speak(
-        `Opening your ${searchTerm} note.`,
-      );
+      speechService.speak(`Opening your ${searchTerm} note.`);
 
-      navigate("/notes", {
+      navigate('/notes', {
         state: {
-          action: "open-note",
+          action: 'open-note',
           searchTerm,
         },
       });
@@ -83,17 +71,12 @@ export const useNehuCommand = (
     // --------------------------------
     // Search notes
     // --------------------------------
-    if (
-      normalizedCommand.includes("search my notes") ||
-      normalizedCommand.includes("search notes") ||
-      normalizedCommand.includes("find my notes") ||
-      normalizedCommand.includes("find notes")
-    ) {
-      speechService.speak("Opening your notes search.");
+    if (normalizedCommand.includes('search my notes') || normalizedCommand.includes('search notes') || normalizedCommand.includes('find my notes') || normalizedCommand.includes('find notes')) {
+      speechService.speak('Opening your notes search.');
 
-      navigate("/notes", {
+      navigate('/notes', {
         state: {
-          action: "search-notes",
+          action: 'search-notes',
         },
       });
 
@@ -103,17 +86,12 @@ export const useNehuCommand = (
     // --------------------------------
     // Create note
     // --------------------------------
-    if (
-      normalizedCommand.includes("create a note") ||
-      normalizedCommand.includes("create note") ||
-      normalizedCommand.includes("new note") ||
-      normalizedCommand.includes("add a note")
-    ) {
-      speechService.speak("Opening a new note.");
+    if (normalizedCommand.includes('create a note') || normalizedCommand.includes('create note') || normalizedCommand.includes('new note') || normalizedCommand.includes('add a note')) {
+      speechService.speak('Opening a new note.');
 
-      navigate("/notes", {
+      navigate('/notes', {
         state: {
-          action: "create-note",
+          action: 'create-note',
         },
       });
 
@@ -123,11 +101,8 @@ export const useNehuCommand = (
     // --------------------------------
     // Go back
     // --------------------------------
-    if (
-      normalizedCommand.includes("go back") ||
-      normalizedCommand === "back"
-    ) {
-      speechService.speak("Going back.");
+    if (normalizedCommand.includes('go back') || normalizedCommand === 'back') {
+      speechService.speak('Going back.');
       navigate(-1);
 
       return true;
@@ -136,12 +111,9 @@ export const useNehuCommand = (
     // --------------------------------
     // Go home
     // --------------------------------
-    if (
-      normalizedCommand.includes("go home") ||
-      normalizedCommand === "home"
-    ) {
-      speechService.speak("Going home.");
-      navigate("/dashboard");
+    if (normalizedCommand.includes('go home') || normalizedCommand === 'home') {
+      speechService.speak('Going home.');
+      navigate('/dashboard');
 
       return true;
     }
@@ -149,11 +121,8 @@ export const useNehuCommand = (
     // --------------------------------
     // Stop listening
     // --------------------------------
-    if (
-      normalizedCommand.includes("stop listening") ||
-      normalizedCommand.includes("stop nehu")
-    ) {
-      speechService.speak("Okay, stopping Nehu.");
+    if (normalizedCommand.includes('stop listening') || normalizedCommand.includes('stop nehu')) {
+      speechService.speak('Okay, stopping Nehu.');
 
       stopListening?.();
 
@@ -165,30 +134,26 @@ export const useNehuCommand = (
     // --------------------------------
     const result = findNehuCommand(normalizedCommand);
 
-    if (result.type === "navigation" && result.route) {
+    if (result.type === 'navigation' && result.route) {
       navigate(result.route);
 
       const responses: Record<string, string> = {
-        "/dashboard": "Opening your dashboard.",
-        "/notes": "Opening your notes.",
-        "/quiz": "Opening your quiz.",
-        "/ai-assistant": "Opening AI Assistant.",
-        "/study-planner": "Opening your study planner.",
-        "/progress": "Opening your progress.",
-        "/profile": "Opening your profile.",
-        "/settings": "Opening your settings.",
+        '/dashboard': 'Opening your dashboard.',
+        '/notes': 'Opening your notes.',
+        '/quiz': 'Opening your quiz.',
+        '/ai-assistant': 'Opening AI Assistant.',
+        '/study-planner': 'Opening your study planner.',
+        '/progress': 'Opening your progress.',
+        '/profile': 'Opening your profile.',
+        '/settings': 'Opening your settings.',
       };
 
-      speechService.speak(
-        responses[result.route] || "Opening that page.",
-      );
+      speechService.speak(responses[result.route] || 'Opening that page.');
 
       return true;
     }
 
-    speechService.speak(
-      "Sorry, I didn't understand that command.",
-    );
+    speechService.speak("Sorry, I didn't understand that command.");
 
     return false;
   };
