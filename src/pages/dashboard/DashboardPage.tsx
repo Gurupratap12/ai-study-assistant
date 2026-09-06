@@ -1,7 +1,7 @@
 import DashboardLayout from '../../components/dashboard/DashboardLayout';
 import StatCard from '../../components/dashboard/StatCard';
 import FeatureCard from '../../components/dashboard/FeatureCard';
-
+import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAuth, useUser } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
@@ -43,7 +43,7 @@ const DashboardPage = () => {
   const navigate = useNavigate();
 
   const userName = user?.firstName || user?.username || 'Student';
-
+  const location = useLocation();
   const [stats, setStats] = useState({
     notes: 0,
     chats: 0,
@@ -80,6 +80,11 @@ const DashboardPage = () => {
   // -----------------------------
 
   useEffect(() => {
+    // Games page par study time count nahi hoga
+    if (location.pathname.startsWith('/games')) {
+      return;
+    }
+
     const today = getTodayKey();
 
     const savedDate = localStorage.getItem('studyDate');
@@ -102,7 +107,7 @@ const DashboardPage = () => {
     }, 60000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [location.pathname]);
 
   // -----------------------------
   // Set Goal

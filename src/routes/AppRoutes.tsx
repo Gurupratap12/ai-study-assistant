@@ -15,6 +15,7 @@ import LoginVerificationPage from '../pages/auth/LoginVerificationPage';
 import QuizPage from '../pages/quiz/QuizPage';
 import ProgressPage from '../pages/progress/ProgressPage';
 import NehuCommandsPage from '../pages/nehu/NehuCommandsPage';
+import SnakeGamePage from '../pages/games/SnakeGamePage';
 const AppRoutes = () => {
   return (
     //<BrowserRouter>
@@ -40,6 +41,7 @@ const AppRoutes = () => {
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="/nehu-commands" element={<NehuCommandsPage />} />
+      <Route path="/games/snake" element={<SnakeGamePage />} />
     </Routes>
     //</BrowserRouter>
   );

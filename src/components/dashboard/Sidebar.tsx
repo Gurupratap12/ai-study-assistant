@@ -125,7 +125,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           );
         })}
       </nav>
-
+      <NavLink
+        to="/games/snake"
+        className={({ isActive }) =>
+          `flex items-center gap-3 rounded-xl px-4 py-3 transition ${isActive ? 'bg-blue-600 text-white' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'}`
+        }
+      >
+        <span className="text-xl">🐍</span>
+        <span>Snake Game</span>
+      </NavLink>
       {/* Logout */}
 
       <button
