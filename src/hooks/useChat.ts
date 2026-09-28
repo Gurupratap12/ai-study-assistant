@@ -16,20 +16,31 @@ export const useChat = () => {
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const [chats, setChats] = useState<Chat[]>([]);
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
+
+  // ==================== LOAD CHATS ====================
 
   useEffect(() => {
     if (!user) return;
 
     const loadChats = async () => {
       try {
-        const chats = (await aiService.getChats(user.id)) as Chat[];
+        const response = await aiService.getChats(user.id);
 
-        if (chats.length > 0) {
-          const latestChat = chats[0];
+        const loadedChats = response as Chat[];
 
-          setCurrentChatId(latestChat._id);
-          setMessages(latestChat.messages ?? []);
+        setChats(loadedChats);
+
+        if (loadedChats.length > 0) {
+          const firstChat = loadedChats[0];
+
+          setCurrentChatId(firstChat._id);
+          setMessages(firstChat.messages ?? []);
+        } else {
+          setCurrentChatId(null);
+          setMessages([]);
         }
       } catch (error) {
         console.error('Failed to load chats:', error);
@@ -39,24 +50,56 @@ export const useChat = () => {
     loadChats();
   }, [user]);
 
+  // ==================== CREATE NEW CHAT ====================
+
+  const createNewChat = () => {
+    setCurrentChatId(null);
+    setMessages([]);
+  };
+
+  // ==================== SELECT CHAT ====================
+
+  const selectChat = (chatId: string) => {
+    const selectedChat = chats.find((chat) => chat._id === chatId);
+
+    if (!selectedChat) return;
+
+    setCurrentChatId(selectedChat._id);
+    setMessages(selectedChat.messages ?? []);
+  };
+
+  // ==================== SEND MESSAGE ====================
+
   const sendMessage = async (text: string) => {
-    if (!text.trim() || !user) return;
+    if (!text.trim() || !user || loading) return;
 
     setLoading(true);
 
     try {
+      const cleanText = text.trim();
+
       const userMessage: ChatMessage = {
         id: crypto.randomUUID(),
         role: 'user',
-        content: text,
+        content: cleanText,
         createdAt: new Date().toISOString(),
       };
+
+      /*
+       * Short-term memory:
+       * Send only the latest 20 messages from the current chat.
+       *
+       * We send the history BEFORE adding the current message,
+       * because the backend will add the current message itself.
+       */
+      const shortTermHistory = messages.slice(-20);
 
       const currentMessages = [...messages, userMessage];
 
       setMessages(currentMessages);
 
-      const reply = await aiService.sendMessage(text);
+      // Send current message + previous chat history to AI
+      const reply = await aiService.sendMessage(cleanText, shortTermHistory);
 
       const aiMessage: ChatMessage = {
         id: crypto.randomUUID(),
@@ -69,14 +112,37 @@ export const useChat = () => {
 
       setMessages(updatedMessages);
 
-      const chat = (await aiService.saveChat(currentChatId, {
+      // ==================== SAVE CHAT ====================
+
+      const title = cleanText.length > 32 ? `${cleanText.substring(0, 32)}...` : cleanText;
+
+      const savedChat = (await aiService.saveChat(currentChatId, {
         clerkId: user.id,
-        title: text.substring(0, 30),
+        title,
         messages: updatedMessages,
       })) as Chat;
 
+      // ==================== NEW CHAT SAVED ====================
+
       if (!currentChatId) {
-        setCurrentChatId(chat._id);
+        setCurrentChatId(savedChat._id);
+
+        setChats((previousChats) => [savedChat, ...previousChats]);
+      }
+
+      // ==================== EXISTING CHAT UPDATED ====================
+      else {
+        setChats((previousChats) =>
+          previousChats.map((chat) =>
+            chat._id === currentChatId
+              ? {
+                  ...chat,
+                  title,
+                  messages: updatedMessages,
+                }
+              : chat,
+          ),
+        );
       }
     } catch (error) {
       console.error('Failed to send message:', error);
@@ -85,25 +151,73 @@ export const useChat = () => {
     }
   };
 
+  // ==================== CLEAR CURRENT CHAT ====================
+
   const clearChat = async () => {
+    if (!currentChatId) {
+      setMessages([]);
+      return;
+    }
+
     try {
       setMessages([]);
-      localStorage.removeItem('ai-chat');
 
-      if (currentChatId) {
-        await aiService.updateChat(currentChatId, {
-          messages: [],
-        });
-      }
+      await aiService.updateChat(currentChatId, {
+        messages: [],
+      });
+
+      setChats((previousChats) =>
+        previousChats.map((chat) =>
+          chat._id === currentChatId
+            ? {
+                ...chat,
+                messages: [],
+              }
+            : chat,
+        ),
+      );
     } catch (error) {
       console.error('Failed to clear chat:', error);
     }
   };
 
+  // ==================== DELETE CHAT ====================
+
+  const deleteChat = async (chatId: string) => {
+    try {
+      await aiService.deleteChat(chatId);
+
+      const remainingChats = chats.filter((chat) => chat._id !== chatId);
+
+      setChats(remainingChats);
+
+      if (currentChatId === chatId) {
+        if (remainingChats.length > 0) {
+          const nextChat = remainingChats[0];
+
+          setCurrentChatId(nextChat._id);
+          setMessages(nextChat.messages ?? []);
+        } else {
+          setCurrentChatId(null);
+          setMessages([]);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to delete chat:', error);
+    }
+  };
+
+  // ==================== RETURN ====================
+
   return {
     messages,
     loading,
+    chats,
+    currentChatId,
     sendMessage,
     clearChat,
+    createNewChat,
+    selectChat,
+    deleteChat,
   };
 };

@@ -12,6 +12,7 @@ type ChatData = {
 
 type ChatResponse = {
   id?: string;
+  _id?: string;
   clerkId?: string;
   title?: string;
   messages?: ChatMessage[];
@@ -25,20 +26,20 @@ type AIResponse = {
 const API_URL = `${import.meta.env.VITE_API_URL}/chats`;
 
 export const aiService = {
-  async sendMessage(message: string): Promise<string> {
+  // ==================== AI CHAT ====================
+
+  async sendMessage(message: string, history: ChatMessage[] = []): Promise<string> {
     try {
-      const response = await fetch(
-        'https://ai-study-assistant-dttq.onrender.com/api/ai/chat',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            message,
-          }),
-        }
-      );
+      const response = await fetch('https://ai-study-assistant-dttq.onrender.com/api/ai/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message,
+          history,
+        }),
+      });
 
       if (!response.ok) {
         throw new Error('AI request failed');
@@ -54,8 +55,10 @@ export const aiService = {
     }
   },
 
+  // ==================== GET CHATS ====================
+
   async getChats(clerkId: string): Promise<ChatResponse[]> {
-    const response = await fetch(`${API_URL}?clerkId=${clerkId}`);
+    const response = await fetch(`${API_URL}?clerkId=${encodeURIComponent(clerkId)}`);
 
     if (!response.ok) {
       throw new Error('Failed to fetch chats');
@@ -65,6 +68,8 @@ export const aiService = {
 
     return data;
   },
+
+  // ==================== CREATE CHAT ====================
 
   async createChat(data: ChatData): Promise<ChatResponse> {
     const response = await fetch(API_URL, {
@@ -84,6 +89,8 @@ export const aiService = {
     return result;
   },
 
+  // ==================== UPDATE CHAT ====================
+
   async updateChat(id: string, data: ChatData): Promise<ChatResponse> {
     const response = await fetch(`${API_URL}/${id}`, {
       method: 'PUT',
@@ -102,16 +109,17 @@ export const aiService = {
     return result;
   },
 
-  async saveChat(
-    id: string | null,
-    data: ChatData
-  ): Promise<ChatResponse> {
+  // ==================== SAVE CHAT ====================
+
+  async saveChat(id: string | null, data: ChatData): Promise<ChatResponse> {
     if (!id) {
       return await this.createChat(data);
     }
 
     return await this.updateChat(id, data);
   },
+
+  // ==================== DELETE CHAT ====================
 
   async deleteChat(id: string): Promise<void> {
     const response = await fetch(`${API_URL}/${id}`, {
