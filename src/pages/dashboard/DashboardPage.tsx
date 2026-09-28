@@ -14,8 +14,8 @@ import { NotebookPen, Brain, TrendingUp, Bot, Mic, Sparkles, Target } from 'luci
 
 const features = [
   {
-    title: 'Nehu Commands',
-    description: 'See what you can ask Nehu to do.',
+    title: 'Nexa Commands',
+    description: 'See what you can ask Nexa to do.',
     icon: <Mic size={22} />,
     route: '/nehu-commands',
   },
@@ -56,9 +56,18 @@ const DashboardPage = () => {
   // -----------------------------
 
   const [goalMinutes, setGoalMinutes] = useState(() => {
-    const saved = localStorage.getItem('studyGoalMinutes');
+    const today = getTodayKey();
+    const savedTodayGoal = localStorage.getItem(`studyGoalMinutes_${today}`);
 
-    return saved ? Number(saved) : 120;
+    if (savedTodayGoal) {
+      const parsedGoal = Number(savedTodayGoal);
+      return Number.isFinite(parsedGoal) && parsedGoal > 0 ? parsedGoal : 120;
+    }
+
+    const savedGoal = localStorage.getItem('studyGoalMinutes');
+    const parsedGoal = savedGoal ? Number(savedGoal) : 120;
+
+    return Number.isFinite(parsedGoal) && parsedGoal > 0 ? parsedGoal : 120;
   });
 
   const [studyMinutes, setStudyMinutes] = useState(() => {
@@ -92,15 +101,39 @@ const DashboardPage = () => {
     if (savedDate !== today) {
       localStorage.setItem('studyDate', today);
       localStorage.setItem('studyMinutes', '0');
-      setStudyMinutes(0);
+
+      const savedTodayGoal = localStorage.getItem(`studyGoalMinutes_${today}`);
+      const fallbackGoal = localStorage.getItem('studyGoalMinutes');
+      const nextGoal = savedTodayGoal ?? fallbackGoal ?? '120';
+
+      localStorage.setItem(`studyGoalMinutes_${today}`, nextGoal);
     }
 
     const interval = setInterval(() => {
+      const currentDate = getTodayKey();
+      const currentSavedDate = localStorage.getItem('studyDate');
+
+      if (currentSavedDate !== currentDate) {
+        localStorage.setItem('studyDate', currentDate);
+        localStorage.setItem('studyMinutes', '1');
+
+        const savedTodayGoal = localStorage.getItem(`studyGoalMinutes_${currentDate}`);
+        const fallbackGoal = localStorage.getItem('studyGoalMinutes');
+        const nextGoal = savedTodayGoal ?? fallbackGoal ?? '120';
+
+        localStorage.setItem(`studyGoalMinutes_${currentDate}`, nextGoal);
+
+        setGoalMinutes(Number(nextGoal));
+        setStudyMinutes(1);
+
+        return;
+      }
+
       setStudyMinutes((previous) => {
         const updated = previous + 1;
 
         localStorage.setItem('studyMinutes', updated.toString());
-        localStorage.setItem('studyDate', today);
+        localStorage.setItem('studyDate', currentDate);
 
         return updated;
       });
@@ -131,6 +164,7 @@ const DashboardPage = () => {
 
     setGoalMinutes(minutes);
 
+    localStorage.setItem(`studyGoalMinutes_${getTodayKey()}`, minutes.toString());
     localStorage.setItem('studyGoalMinutes', minutes.toString());
   };
 
@@ -138,7 +172,7 @@ const DashboardPage = () => {
   // Completion %
   // -----------------------------
 
-  const completion = Math.min(100, Math.round((studyMinutes / goalMinutes) * 100));
+  const completion = goalMinutes > 0 ? Math.min(100, Math.round((studyMinutes / goalMinutes) * 100)) : 0;
 
   const goalHours = Math.floor(goalMinutes / 60);
   const goalRemainingMinutes = goalMinutes % 60;
@@ -168,9 +202,9 @@ const DashboardPage = () => {
         const chats = await aiService.getChats(user.id);
         const quizzes = await quizService.getQuizResults(user.id);
 
-        const totalMessages = chats.reduce((count: number, chat: any) => count + (chat.messages?.length || 0), 0);
+        const totalMessages = chats.reduce((count: number, chat: { messages?: unknown[] }) => count + (chat.messages?.length ?? 0), 0);
 
-        const averageScore = quizzes.length > 0 ? Math.round(quizzes.reduce((sum: number, quiz: any) => sum + (quiz.percentage || 0), 0) / quizzes.length) : 0;
+        const averageScore = quizzes.length > 0 ? Math.round(quizzes.reduce((sum: number, quiz: { percentage?: number }) => sum + (quiz.percentage ?? 0), 0) / quizzes.length) : 0;
 
         setStats({
           notes: notes.length,

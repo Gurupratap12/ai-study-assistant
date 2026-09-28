@@ -94,9 +94,9 @@ const SettingsPage = () => {
             {/* Nehu Voice Assistant */}
             <div className="flex items-center justify-between border-t border-slate-200 pt-6 dark:border-slate-800">
               <div>
-                <p className="font-medium text-slate-900 dark:text-white">Nehu Voice Assistant</p>
+                <p className="font-medium text-slate-900 dark:text-white">Nexa Voice Assistant</p>
 
-                <p className="text-sm text-slate-500 dark:text-slate-400">Enable or disable Nehu voice commands</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">Enable or disable Nexa voice commands</p>
               </div>
 
               <button
@@ -115,10 +115,10 @@ const SettingsPage = () => {
                 <div className={`h-3 w-3 rounded-full ${nehuEnabled ? 'animate-pulse bg-green-500' : 'bg-slate-400'}`} />
 
                 <div>
-                  <p className="font-medium text-slate-900 dark:text-white">Nehu is {nehuEnabled ? 'enabled' : 'disabled'}</p>
+                  <p className="font-medium text-slate-900 dark:text-white">Nexa is {nehuEnabled ? 'enabled' : 'disabled'}</p>
 
                   <p className="text-sm text-slate-500 dark:text-slate-400">
-                    {nehuEnabled ? 'Voice commands are available across the dashboard.' : 'Nehu will not appear or listen for voice commands.'}
+                    {nehuEnabled ? 'Voice commands are available across the dashboard.' : 'Nexa will not appear or listen for voice commands.'}
                   </p>
                 </div>
               </div>

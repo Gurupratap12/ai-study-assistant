@@ -121,8 +121,8 @@ export const useNehuCommand = (stopListening?: () => void) => {
     // --------------------------------
     // Stop listening
     // --------------------------------
-    if (normalizedCommand.includes('stop listening') || normalizedCommand.includes('stop nehu')) {
-      speechService.speak('Okay, stopping Nehu.');
+    if (normalizedCommand.includes('stop listening') || normalizedCommand.includes('stop nexa')) {
+      speechService.speak('Okay, stopping Nexa.');
 
       stopListening?.();
 

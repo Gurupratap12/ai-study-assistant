@@ -1,9 +1,19 @@
 import { useEffect, useState } from 'react';
+import { useUser } from '@clerk/clerk-react';
+
 import type { ChatMessage } from '../types/chat';
 import { aiService } from '../services/aiService';
-import { useUser } from '@clerk/clerk-react';
+
+type Chat = {
+  _id: string;
+  clerkId: string;
+  title: string;
+  messages: ChatMessage[];
+};
+
 export const useChat = () => {
   const { user } = useUser();
+
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
@@ -13,14 +23,16 @@ export const useChat = () => {
 
     const loadChats = async () => {
       try {
-        const chats = await aiService.getChats(user.id);
+        const chats = (await aiService.getChats(user.id)) as Chat[];
 
         if (chats.length > 0) {
-          setCurrentChatId(chats[0]._id);
-          setMessages(chats[0].messages);
+          const latestChat = chats[0];
+
+          setCurrentChatId(latestChat._id);
+          setMessages(latestChat.messages ?? []);
         }
       } catch (error) {
-        console.error(error);
+        console.error('Failed to load chats:', error);
       }
     };
 
@@ -28,13 +40,11 @@ export const useChat = () => {
   }, [user]);
 
   const sendMessage = async (text: string) => {
-    console.log('Current Chat ID:', currentChatId);
     if (!text.trim() || !user) return;
 
     setLoading(true);
 
     try {
-      // User Message
       const userMessage: ChatMessage = {
         id: crypto.randomUUID(),
         role: 'user',
@@ -59,18 +69,17 @@ export const useChat = () => {
 
       setMessages(updatedMessages);
 
-      // Save / Update Chat
-      const chat = await aiService.saveChat(currentChatId, {
+      const chat = (await aiService.saveChat(currentChatId, {
         clerkId: user.id,
         title: text.substring(0, 30),
         messages: updatedMessages,
-      });
+      })) as Chat;
 
       if (!currentChatId) {
         setCurrentChatId(chat._id);
       }
     } catch (error) {
-      console.error(error);
+      console.error('Failed to send message:', error);
     } finally {
       setLoading(false);
     }

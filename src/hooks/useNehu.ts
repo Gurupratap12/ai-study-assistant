@@ -5,11 +5,11 @@ const useNehu = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      console.log('Nehu: Speech Recognition is not supported.');
+      console.log('Nexa:Speech Recognition is not supported.');
       return;
     }
 
-    console.log('Nehu: Speech Recognition is available.');
+    console.log('Nexa: Speech Recognition is available.');
   }, []);
 };
 

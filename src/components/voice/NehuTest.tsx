@@ -1,11 +1,40 @@
 import { useRef, useState } from 'react';
 
+type SpeechRecognitionEvent = Event & {
+  results: SpeechRecognitionResultList;
+};
+
+type SpeechRecognitionErrorEvent = Event & {
+  error: string;
+};
+
+type SpeechRecognitionInstance = {
+  lang: string;
+  continuous: boolean;
+  interimResults: boolean;
+  start: () => void;
+  stop: () => void;
+  onstart: (() => void) | null;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
+  onend: (() => void) | null;
+};
+
+type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
+
 const NehuTest = () => {
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const [listening, setListening] = useState(false);
 
   const startListening = () => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const speechWindow = window as Window & {
+      SpeechRecognition?: SpeechRecognitionConstructor;
+      webkitSpeechRecognition?: SpeechRecognitionConstructor;
+    };
+
+    const SpeechRecognition =
+      speechWindow.SpeechRecognition ||
+      speechWindow.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
       alert('Speech recognition is not supported.');
@@ -20,23 +49,23 @@ const NehuTest = () => {
 
     recognition.onstart = () => {
       setListening(true);
-      console.log('Nehu: Listening...');
+      console.log('Nexa: Listening...');
     };
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       const text = event.results[0][0].transcript;
 
-      console.log('Nehu heard:', text);
+      console.log('Nexa heard:', text);
     };
 
-    recognition.onerror = (event: any) => {
-      console.log('Nehu error:', event.error);
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+      console.log('Nexa error:', event.error);
       setListening(false);
     };
 
     recognition.onend = () => {
       setListening(false);
-      console.log('Nehu: Stopped listening.');
+      console.log('Nexa: Stopped listening.');
     };
 
     recognitionRef.current = recognition;
@@ -44,8 +73,12 @@ const NehuTest = () => {
   };
 
   return (
-    <button type="button" onClick={startListening} disabled={listening}>
-      {listening ? '🎙️ Listening...' : '🎤 Test Nehu'}
+    <button
+      type="button"
+      onClick={startListening}
+      disabled={listening}
+    >
+      {listening ? '🎙️ Listening...' : '🎤 Test Nexa'}
     </button>
   );
 };
